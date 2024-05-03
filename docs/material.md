@@ -1,6 +1,28 @@
 # Material Format
 
+Unpacked material has the following file structure:
+
+```
+MyMaterial/
+├─ material.json
+├─ uniforms/
+│  ├─ ...
+│  ├─ MyUniform.json
+├─ buffers/
+│  ├─ ...
+│  ├─ MyBuffer.json
+├─ passes/
+│  ├─ ...
+│  ├─ MyPass.json
+│  ├─ MyPass/
+│  │  ├─ ...
+│  │  ├─ 0.ESSL_310.Fragment.glsl
+
+```
+
 ## Material Schema
+
+material.json
 
 ```json
 {
