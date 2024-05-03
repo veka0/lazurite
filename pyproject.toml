@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 name = "lazurite"
 description = "Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine"
 keywords = ["shader", "minecraft", "bedrock", "renderdragon"]
-version = "0.1.0"
+version = "0.1.1"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "veka0" }]
@@ -32,7 +32,7 @@ dependencies = ["pyjson5", "myers", "pcpp", "pycryptodome", "sympy"]
 
 
 [project.urls]
-Documentation = "https://github.com/veka0/lazurite"
+Documentation = "https://veka0.github.io/lazurite"
 Repository = "https://github.com/veka0/lazurite"
 
 
