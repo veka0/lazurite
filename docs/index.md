@@ -1,6 +1,6 @@
-# Lazurite
+# Introduction
 
-Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine, which focuses on intuitive use and powerful features.
+Lazurite is an unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine, which focuses on intuitive use and powerful features.
 
 ## Installation
 
@@ -22,4 +22,4 @@ python -m pip install lazurite
 
 ## Next steps
 
-Read the documentation at DOCS LINK GOES HERE
+Learn about [available commands](commands.md), [unpacked material syntax](material.md) and how [project compilation](project.md) works.

@@ -1,0 +1,44 @@
+site_name: Lazurite
+
+copyright: This website is not affiliated with Mojang Studios, Microsoft or Nvidia
+
+theme:
+  name: material
+
+  icon:
+    logo: simple/crystal
+
+  highlightjs: true
+  hljs_languages:
+    # - glsl
+    - json
+    - c
+
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+

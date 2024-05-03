@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "lazurite"
+description = "Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine"
+keywords = ["shader", "minecraft", "bedrock", "renderdragon"]
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "veka0" }]
+
+classifiers = [
+    # General
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    # Python Versions
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    # OS
+    "Operating System :: Android",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    # Topics
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Compilers",
+]
+dependencies = ["pyjson5", "myers", "pcpp", "pycryptodome", "sympy"]
+
+
+[project.urls]
+Documentation = "https://github.com/veka0/lazurite"
+Repository = "https://github.com/veka0/lazurite"
+
+
+[project.scripts]
+lazurite = "lazurite.cli:main"
