@@ -22,4 +22,4 @@ python -m pip install lazurite
 
 ## Next steps
 
-Read the documentation at DOCS LINK GOES HERE
+Read the documentation here <https://veka0.github.io/lazurite>
