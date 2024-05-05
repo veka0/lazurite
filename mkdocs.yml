@@ -4,6 +4,8 @@ copyright: This website is not affiliated with Mojang Studios, Microsoft or Nvid
 
 theme:
   name: material
+  features:
+  - content.code.copy
 
   icon:
     logo: simple/crystal
