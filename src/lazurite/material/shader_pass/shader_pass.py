@@ -108,7 +108,7 @@ class Pass:
         self.fallback_pass = object.get("fallback_pass", self.fallback_pass)
         mode = object.get("default_blend_mode", None)
         if mode != None:
-            self.default_blend_mode = BlendMode(mode) if mode else BlendMode.Unspecified
+            self.default_blend_mode = BlendMode[mode] if mode else BlendMode.Unspecified
         self.default_variant = object.get("default_variant", self.default_variant)
 
         if "variants" in object:
