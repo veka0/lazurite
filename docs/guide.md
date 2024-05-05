@@ -917,7 +917,7 @@ This will invert terrain colors.
 
 Now, we're finally ready to compile the project!
 
-Run the following commands (optionally, with `-p windows`, `-p android` or `-p windows, android`, depending on which platforms you wish to compile for):
+Run the following command (optionally, with `-p windows`, `-p android` or `-p windows, android`, depending on which platforms you wish to compile for):
 
 ```sh
 lazurite build ./helloWorld
