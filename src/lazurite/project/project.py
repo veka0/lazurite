@@ -328,7 +328,7 @@ def compile(
                     arg_platform,
                     arg_varying,
                     arg_defines,
-                    len(shaders) * [mat_config.compiler_options + dxc_args],
+                    len(shaders) * [mat_config.compiler_options + shaderc_args],
                 )
             else:
                 results = executor.map(
@@ -338,7 +338,7 @@ def compile(
                     arg_stage,
                     arg_entry_point,
                     arg_defines,
-                    len(shaders) * [mat_config.compiler_options + shaderc_args],
+                    len(shaders) * [mat_config.compiler_options + dxc_args],
                 )
 
         for shader, result in zip(shaders, results):
