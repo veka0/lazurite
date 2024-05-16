@@ -250,15 +250,20 @@ def compile(
         # If it failed to load any source materials.
         if not material.get_platforms():
             # Load and merge vanilla materials with any platforms.
-            material = (
-                _merge_source_materials(
-                    mat_dir,
-                    set(ShaderPlatform),
-                    proj_config.merge_source,
-                    material_cache,
-                )
-                or material
+            temp_mat = _merge_source_materials(
+                mat_dir,
+                set(ShaderPlatform),
+                proj_config.merge_source,
+                material_cache,
             )
+
+            if temp_mat:
+                material = temp_mat
+            elif proj_config.merge_source:
+                # Display a warning if no valid merge source was ever found
+                # but merge_source in project config is not empty.
+                print(f"Warning! Failed to find merge source for {mat_dir.name}")
+
             # Add necessary platforms.
             material.add_platforms(compilable_platforms)
             # Remove other unwanted platforms.
