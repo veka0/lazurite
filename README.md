@@ -10,7 +10,8 @@ PyPi page: <https://pypi.org/project/lazurite>
 
 Lazurite requires to have Python 3.10+ installed, but 3.12 is recommended.
 
-Official python installation page: <https://www.python.org/downloads/>
+Official python installation page: <https://www.python.org/downloads>.
+Windows users are recommended to install Python from Microsoft Store.
 
 After installing python, you can install lazurite package from pypi repository, with a command
 
