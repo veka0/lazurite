@@ -61,7 +61,7 @@ def _merge_source_by_path(
     mat = None
     for platform in platforms:
         for path in merge_source:
-            if not path.endswith(name):
+            if os.path.basename(path) != name:
                 continue
             found_platform = False
             if path in cache:
