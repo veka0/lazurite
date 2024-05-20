@@ -65,8 +65,18 @@ def unpack(args):
         material = Material.load_bin_file(file)
         if args.sort_flags:
             material.sort_variants()
+
+        # That should keep the project protected legally.
+        skip_shaders = args.skip_shaders
+        if material.encryption != EncryptionType.NONE:
+            print(
+                f"Warning! {material.name} material is encrypted. "
+                "This tool cannot be used to obtain decrypted shaders."
+            )
+            skip_shaders = True
+
         material.store(
-            file_name.removesuffix(Material.EXTENSION), args.output, args.skip_shaders
+            file_name.removesuffix(Material.EXTENSION), args.output, skip_shaders
         )
 
 
@@ -278,10 +288,13 @@ def info(args):
 def main():
     parser = argparse.ArgumentParser(
         prog="lazurite",
-        description="Shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine",
+        description="Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine",
         epilog="Epilog",
     )
 
+    # TODO: explore sub-parsers
+    # TODO: add `serialize` command for generating material json data,
+    # as alternative (version control friendly) merge source instead of material.bin files
     commands = {
         "unpack": unpack,
         "pack": pack,
@@ -366,15 +379,32 @@ def main():
         type=str,
         nargs="*",
         default=[],
-        help="Additional DXC compiler arguments",
+        help="Additional SHADERC compiler arguments",
     )
     parser.add_argument(
         "--dxc-args",
         type=str,
         nargs="*",
         default=[],
-        help="Additional SHADERC compiler arguments",
+        help="Additional DXC compiler arguments",
     )
+    # TODO: Implement
+    # parser.add_argument(
+    #     "-i",
+    #     "--include",  # Might change
+    #     type=str,
+    #     nargs="*",
+    #     default=[],
+    #     help="GLOB patterns for including materials during project compilation.",
+    # )
+    # parser.add_argument(
+    #     "-e",
+    #     "--exclude",  # Might change
+    #     type=str,
+    #     nargs="*",
+    #     default=[],
+    #     help="GLOB patterns for excluding materials during project compilation.",
+    # )
 
     # Execute command.
     args = parser.parse_args()

@@ -177,14 +177,6 @@ class Material:
         self._store_json(material_dir)
         self._store_items(material_dir, "buffers", self.buffers)
         self._store_items(material_dir, "uniforms", self.uniforms)
-
-        # That should keep the project protected legally.
-        if self.encryption != EncryptionType.NONE:
-            print(
-                f"Warning! {self.name} material is encrypted. "
-                "This tool cannot be used to obtain decrypted shaders."
-            )
-            skip_shaders = True
         self._store_items(material_dir, "passes", self.passes, skip_shaders)
 
     def _store_json(self, material_dir):
