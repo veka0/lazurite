@@ -16,15 +16,15 @@ python -m lazurite COMMAND [INPUTS ...] [ARGUMENTS ...]
 
 Here is a cheatsheet of what each command does
 
-| Command     | Description                                                                                  |
-| ----------- | -------------------------------------------------------------------------------------------- |
-| **unpack**  | Unpacks input materials                                                                      |
-| **pack**    | Packs materials back into `material.bin` files                                               |
-| **label**   | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)              |
-| **clear**   | Clears compiled shaders in materials, while removing encryption                              |
-| **restore** | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials |
-| **build**   | Compiles all materials and shaders in a project                                              |
-| **info**    | Displays useful information about input material                                             |
+| Command                            | Description                                                                                  |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- |
+| [**unpack**](commands.md#unpack)   | Unpacks input materials                                                                      |
+| [**pack**](commands.md#pack)       | Packs materials back into `material.bin` files                                               |
+| [**label**](commands.md#label)     | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)              |
+| [**clear**](commands.md#clear)     | Clears compiled shaders in materials, while removing encryption                              |
+| [**restore**](commands.md#restore) | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials |
+| [**build**](commands.md#build)     | Compiles all materials and shaders in a project                                              |
+| [**info**](commands.md#info)       | Displays useful information about input material                                             |
 
 ## unpack
 
@@ -134,8 +134,9 @@ lazurite clear [MATERIALS ...] [-o OUTPUT]
 | --------------- | -------------------------------------------------------------- | ----------------- |
 | `-o` `--output` | Output folder, where cleared material bin files will be stored | current directory |
 
-Wipes all compiled shaders, while removing encryption. This command can be useful when you need a merge source for your RTX shader, but
-don't want it to be encrypted. Note that if you unpack resulting material, its compiled shader files will be empty.
+Wipes all compiled shaders, while removing encryption. This command can be useful when you need a light-weight
+merge source or when you want to compile RTX shader that shouldn't be encrypted.
+Note that if you unpack resulting material, its compiled shader files will be empty.
 
 Example usage
 
