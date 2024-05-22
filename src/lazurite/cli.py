@@ -179,7 +179,10 @@ def restore(args):
     paths = [p[0] for p in paths]
 
     with ProcessPoolExecutor(max_workers=args.max_workers or None) as executor:
-        executor.map(restore_single_material, [args] * len(paths), paths)
+        # Normally, workers will not raise any exceptions during execution
+        # but iterating over results will raise them properly.
+        for _ in executor.map(restore_single_material, [args] * len(paths), paths):
+            pass
 
 
 def build(args):
