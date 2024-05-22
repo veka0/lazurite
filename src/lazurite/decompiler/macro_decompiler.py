@@ -130,6 +130,9 @@ class Shader:
         """
         Groups lines with the same condition into chunks, populates `Shader.chunks` list.
         """
+        if not self.line_conditions:
+            return
+
         start = 0
         chunks: list[tuple[int, int]] = []
         end = len(self.line_conditions) - 1
