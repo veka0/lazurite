@@ -29,4 +29,4 @@ python -m pip install lazurite
 
 Try making your [first shader](guide.md) or learn about [available commands](commands.md), [unpacked material syntax](material.md) and how [project compilation](project.md) works.
 
-hi
+hello
