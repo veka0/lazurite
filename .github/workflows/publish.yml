@@ -42,21 +42,15 @@ jobs:
           ./dist/*.whl
           
     - name: Create GitHub Release Draft
+      # Create and upload to GitHub Release using the `gh` CLI.
+      # `dist/` contains the built packages, and the
+      # sigstore-produced signatures and certificates.
       env:
         GITHUB_TOKEN: ${{ github.token }}
       run: >-
         gh release create --draft
         '${{ github.ref_name }}'
         --repo '${{ github.repository }}'
-        --notes ""
+        --generate-notes
+        dist/**
         
-    - name: Upload artifact signatures to GitHub Release
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      # Upload to GitHub Release using the `gh` CLI.
-      # `dist/` contains the built packages, and the
-      # sigstore-produced signatures and certificates.
-      run: >-
-        gh release upload
-        '${{ github.ref_name }}' dist/**
-        --repo '${{ github.repository }}'
