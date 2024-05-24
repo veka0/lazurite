@@ -1,0 +1,62 @@
+name: Build, Publish, Release
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+' # On semantic tag push
+      
+jobs:
+  publish:
+    name: Build Distribution
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing and sigstore
+      contents: write  # IMPORTANT: mandatory for making GitHub Releases
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+        cache: pip
+        
+    - name: Install build
+      run: >-
+        python3 -m
+        pip install
+        build
+        --user
+        
+    - name: Build a binary wheel and a source tarball
+      run: python3 -m build
+      
+    - name: Publish distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      
+    - name: Sign the dists with Sigstore
+      uses: sigstore/gh-action-sigstore-python@v2.1.1
+      with:
+        inputs: >-
+          ./dist/*.tar.gz
+          ./dist/*.whl
+          
+    - name: Create GitHub Release Draft
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: >-
+        gh release create --draft
+        '${{ github.ref_name }}'
+        --repo '${{ github.repository }}'
+        --notes ""
+        
+    - name: Upload artifact signatures to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      # Upload to GitHub Release using the `gh` CLI.
+      # `dist/` contains the built packages, and the
+      # sigstore-produced signatures and certificates.
+      run: >-
+        gh release upload
+        '${{ github.ref_name }}' dist/**
+        --repo '${{ github.repository }}'
