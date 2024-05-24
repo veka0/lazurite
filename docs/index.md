@@ -25,6 +25,29 @@ or
 python -m pip install lazurite
 ```
 
+???warning "Termux installation error"
+
+    If during Lazurite installation on Termux (Android) you encounter this error:
+
+    ```
+    aarch64-linux-android-clang++: error: unknown argument: '-fno-openmp-implicit-rpath'
+          error: command '/data/data/com.termux/files/usr/bin/aarch64-linux-android-clang++' failed with exit code 1
+          note: This error originates from a subprocess, and is likely not a problem with pip.
+
+    ERROR: Failed building wheel for pyjson5
+    Failed to build pycryptodome pyjson5
+    ERROR: Could not build wheels for pycryptodome, pyjson5, which is required to install pyproject.toml-based projects
+    ```
+
+    It can be fixed by running the following commands (as suggested [here](<https://github.com/termux/termux-packages/issues/20039#issuecomment-2096494418>)):
+
+    ```sh
+    _file="$(find $PREFIX/lib/python3.11 -name "_sysconfigdata*.py")"
+    rm -rf $PREFIX/lib/python3.11/__pycache__
+    cp $_file "$_file".backup
+    sed -i 's|-fno-openmp-implicit-rpath||g' "$_file"
+    ```
+
 ## Next steps
 
 Try making your [first shader](guide.md) or learn about [available commands](commands.md), [unpacked material syntax](material.md) and how [project compilation](project.md) works.
