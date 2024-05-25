@@ -80,14 +80,22 @@ class DxcCompiler:
             f.close()
             args.extend(("-Fo", f.name))
 
-            result = subprocess.run(args)
+            result = subprocess.run(args, capture_output=True)
 
-            if result.stderr:
-                print(result.stderr.decode())
+            log = []
             if result.stdout:
-                print(result.stdout.decode())
+                log.append(result.stdout.decode())
+            if result.stderr:
+                log.append(result.stderr.decode())
 
-            result.check_returncode()
+            has_log = bool(log)
+            log = "\n\n".join([""] + log + ["Command: " + " ".join(args)])
+
+            if result.returncode:
+                raise Exception(log)
+
+            if has_log:
+                print(log)
 
             with open(f.name, "rb") as f:
                 return f.read()

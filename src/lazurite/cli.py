@@ -295,7 +295,6 @@ def main():
         epilog="For more information, see documentation at https://veka0.github.io/lazurite/",
     )
 
-    # TODO: explore sub-parsers
     # TODO: add `serialize` command for generating material json data,
     # as alternative (version control friendly) merge source instead of material.bin files
     commands = {

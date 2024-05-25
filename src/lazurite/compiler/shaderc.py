@@ -47,7 +47,7 @@ class ShadercCompiler:
         include: list[str] = None,
         defines: list[MacroDefine] = None,
         options: list[str] = None,
-    ) -> BgfxShader:
+    ):
         args = [self.shaderc_path]
 
         args.extend(("-f", file))
@@ -106,12 +106,20 @@ class ShadercCompiler:
 
             result = subprocess.run(args, capture_output=True)
 
-            if result.stderr:
-                print(result.stderr.decode())
+            log = []
             if result.stdout:
-                print(result.stdout.decode())
+                log.append(result.stdout.decode())
+            if result.stderr:
+                log.append(result.stderr.decode())
 
-            result.check_returncode()
+            has_log = bool(log)
+            log = "\n\n".join([""] + log + ["Command: " + " ".join(args)])
+
+            if result.returncode:
+                raise Exception(log)
+
+            if has_log:
+                print(log)
 
             bgfx_shader = BgfxShader()
             bgfx_shader.read(f, platform, stage)
