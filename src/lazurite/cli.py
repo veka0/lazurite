@@ -292,7 +292,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog="lazurite",
         description="Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine",
-        epilog="Epilog",
+        epilog="For more information, see documentation at https://veka0.github.io/lazurite/",
     )
 
     # TODO: explore sub-parsers
@@ -311,10 +311,11 @@ def main():
     }
 
     # Common arguments.
-    parser.add_argument("command", choices=commands.keys(), help="Command to use")
-    parser.add_argument("inputs", nargs="*", help="List of inputs")
-    parser.add_argument("-o", "--output", type=str, default="", help="Output path")
-    parser.add_argument(
+    group = parser.add_argument_group("common arguments")
+    group.add_argument("command", choices=commands.keys(), help="Command to use")
+    group.add_argument("inputs", nargs="*", help="List of inputs")
+    group.add_argument("-o", "--output", type=str, default="", help="Output path")
+    group.add_argument(
         "--max-workers",
         type=int,
         default=0,
@@ -322,50 +323,53 @@ def main():
     )
 
     # Unpack arguments.
-    parser.add_argument(
+    group = parser.add_argument_group("unpack arguments")
+    group.add_argument(
         "--sort-flags",
         action="store_true",
         help="Sorts variants and flags alphabeticaly during unpacking",
     )
-    parser.add_argument(
+    group.add_argument(
         "--skip-shaders", action="store_true", help="Don't unpack compiled shaders"
     )
 
     # Restore arguments.
-    parser.add_argument(
-        "--merge-stages",
-        action="store_true",
-        help="Restore shader stages in a single file",
-    )
-    parser.add_argument(
-        "--split-passes",
-        action="store_true",
-        help="Restore separate files for individual passes",
-    )
-    parser.add_argument(
+    group = parser.add_argument_group("restore arguments")
+    group.add_argument(
         "--no-processing",
         action="store_true",
         help="Disable additional processing used for converting from restored GLSL to BGFX SC",
     )
-    parser.add_argument(
+    group.add_argument(
         "--timeout",
         type=float,
         default=10,
         help="Maximum time allowed for slow search restoring algorithm, in seconds",
+    )
+    group.add_argument(
+        "--split-passes",
+        action="store_true",
+        help="Restore separate files for individual passes",
+    )
+    group.add_argument(
+        "--merge-stages",
+        action="store_true",
+        help="Restore shader stages in a single file",
     )
     # Not implemented.
     # cli_parser.add_argument("--stages", default=["all"], nargs="*")
     # cli_parser.add_argument("--platforms", default=["essl_310"], nargs="*")
 
     # Build arguments.
-    parser.add_argument(
+    group = parser.add_argument_group("build arguments")
+    group.add_argument(
         "-p",
         "--profile",
         type=str,
         nargs="*",
         help="Profiles to use when building projects",
     )
-    parser.add_argument(
+    group.add_argument(
         "-d",
         "--defines",
         type=str,
@@ -373,18 +377,18 @@ def main():
         default=[],
         help="Additional defines, passed to shader compiler",
     )
-    parser.add_argument("--dxc", type=str, default=None, help="DXC compiler command")
-    parser.add_argument(
+    group.add_argument(
         "--shaderc", type=str, default=None, help="SHADERC compiler command"
     )
-    parser.add_argument(
+    group.add_argument("--dxc", type=str, default=None, help="DXC compiler command")
+    group.add_argument(
         "--shaderc-args",
         type=str,
         nargs="*",
         default=[],
         help="Additional SHADERC compiler arguments",
     )
-    parser.add_argument(
+    group.add_argument(
         "--dxc-args",
         type=str,
         nargs="*",
