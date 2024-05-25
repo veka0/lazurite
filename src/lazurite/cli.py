@@ -193,6 +193,8 @@ def build(args):
             path,
             args.profile,
             args.output,
+            args.materials,
+            args.exclude,
             defines,
             args.shaderc,
             args.dxc,
@@ -369,6 +371,22 @@ def main():
         help="Profiles to use when building projects",
     )
     group.add_argument(
+        "-m",
+        "--materials",
+        type=str,
+        nargs="*",
+        default=[],
+        help="Glob patterns for choosing materials during project compilation.",
+    )
+    group.add_argument(
+        "-e",
+        "--exclude",
+        type=str,
+        nargs="*",
+        default=[],
+        help="Glob patterns for excluding materials during project compilation.",
+    )
+    group.add_argument(
         "-d",
         "--defines",
         type=str,
@@ -394,23 +412,6 @@ def main():
         default=[],
         help="Additional DXC compiler arguments",
     )
-    # TODO: Implement
-    # parser.add_argument(
-    #     "-i",
-    #     "--include",  # Might change
-    #     type=str,
-    #     nargs="*",
-    #     default=[],
-    #     help="GLOB patterns for including materials during project compilation.",
-    # )
-    # parser.add_argument(
-    #     "-e",
-    #     "--exclude",  # Might change
-    #     type=str,
-    #     nargs="*",
-    #     default=[],
-    #     help="GLOB patterns for excluding materials during project compilation.",
-    # )
 
     # Execute command.
     args = parser.parse_args()

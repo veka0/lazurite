@@ -192,6 +192,8 @@ def compile(
     project_path: str,
     profiles: list[str],
     output_folder: str = "",
+    material_patterns: list[str] = None,
+    exclude_material_patterns: list[str] = None,
     defines: list[MacroDefine] = None,
     shaderc_path: str = None,
     dxc_path: str = None,
@@ -204,16 +206,28 @@ def compile(
 
     if profiles is None:
         profiles = []
-
     if shaderc_args is None:
         shaderc_args = []
-
     if dxc_args is None:
         dxc_args = []
+    if material_patterns is None:
+        material_patterns = []
+    if exclude_material_patterns is None:
+        exclude_material_patterns = []
 
     proj_config = ProjectConfig()
     proj_config.read_json_file(os.path.join(project_path, "project.json"), profiles)
     platforms_set = set(proj_config.platforms)
+
+    if material_patterns:
+        proj_config.include_patterns = [
+            os.path.relpath(m, project_path) for m in material_patterns
+        ]
+        proj_config.exclude_patterns = []
+    if exclude_material_patterns:
+        proj_config.exclude_patterns.extend(
+            (os.path.relpath(m, project_path) for m in exclude_material_patterns)
+        )
 
     shaderc_compiler: ShadercCompiler = None
     dxc_compiler: DxcCompiler = None
