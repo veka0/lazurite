@@ -145,12 +145,13 @@ def _compile_bgfx_shader_async(
     stage: ShaderStage,
     platform: ShaderPlatform,
     varying_path: str,
+    include: list[str],
     defines: list[MacroDefine],
     options: list[str],
 ):
     if stage == ShaderStage.Compute:
         compiled_shader = shaderc_compiler.compile(
-            code_path, platform, stage, None, None, defines, options
+            code_path, platform, stage, None, include, defines, options
         )
     else:
         parser = pcpp.Preprocessor()
@@ -169,7 +170,7 @@ def _compile_bgfx_shader_async(
             # f.flush()
 
             compiled_shader = shaderc_compiler.compile(
-                code_path, platform, stage, f.name, None, defines, options
+                code_path, platform, stage, f.name, include, defines, options
             )
 
     return compiled_shader
@@ -332,6 +333,7 @@ def compile(
                     arg_stage,
                     arg_platform,
                     arg_varying,
+                    len(shaders) * [proj_config.include_search_paths],
                     arg_defines,
                     len(shaders) * [mat_config.compiler_options + shaderc_args],
                 )
@@ -342,6 +344,7 @@ def compile(
                     arg_platform,
                     arg_stage,
                     arg_entry_point,
+                    len(shaders) * [proj_config.include_search_paths],
                     arg_defines,
                     len(shaders) * [mat_config.compiler_options + dxc_args],
                 )

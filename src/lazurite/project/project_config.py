@@ -1,4 +1,7 @@
 import os, pyjson5
+from collections.abc import Callable
+from typing import Any
+
 from lazurite.material import Material
 from lazurite.material.shader_pass.shader_definition import ShaderPlatform
 from lazurite.compiler.macro_define import MacroDefine
@@ -10,6 +13,7 @@ class ProjectConfig:
     merge_source: list[str]
     include_patterns: list[str]
     exclude_patterns: list[str]
+    include_search_paths: list[str]
 
     def __init__(self) -> None:
         self.macros = []
@@ -17,23 +21,51 @@ class ProjectConfig:
         self.merge_source = []
         self.include_patterns = ["*"]
         self.exclude_patterns = [".*", "_*"]
+        self.include_search_paths = []
 
     def read_json_file(self, path: str, profiles: list[str]):
-        def append_unique(target: list, source: list):
-            """
-            Appends elements from source to target, if they aren't in target list already.
-            """
-            target.extend((item for item in source if item not in target))
-
         if not os.path.isfile(path):
             return
         with open(path) as f:
             json_data = pyjson5.load(f)
-        has_macros = False
-        has_platforms = False
-        has_merge = False
-        has_include_pattern = False
-        has_exclude_pattern = False
+        project_folder = os.path.split(path)[0]
+
+        properties: list[tuple[list, str, Callable[[Any], list]]] = [
+            (
+                self.macros,
+                "macros",
+                lambda p: [MacroDefine.from_string(x) for x in p],
+            ),
+            (
+                self.platforms,
+                "platforms",
+                lambda p: [ShaderPlatform[x] for x in p],
+            ),
+            (
+                self.merge_source,
+                "merge_source",
+                lambda p: p,
+            ),
+            (
+                self.include_patterns,
+                "include_patterns",
+                lambda p: p,
+            ),
+            (
+                self.exclude_patterns,
+                "exclude_patterns",
+                lambda p: p,
+            ),
+            (
+                self.include_search_paths,
+                "include_search_paths",
+                lambda p: [
+                    os.path.normpath(os.path.join(project_folder, x)) for x in p
+                ],
+            ),
+        ]
+        updated_properties = {name: False for _, name, _ in properties}
+
         if "profiles" in json_data:
             json_profiles = json_data["profiles"]
             for profile in profiles:
@@ -42,80 +74,30 @@ class ProjectConfig:
                     continue
                 profile = json_profiles[profile]
 
-                if "macros" in profile:
-                    if not has_macros:
-                        self.macros = []
-                        has_macros = True
-                    append_unique(
-                        self.macros,
-                        [MacroDefine.from_string(m) for m in profile["macros"]],
-                    )
+                for property, property_name, value_getter in properties:
+                    if property_name in profile:
+                        if not updated_properties[property_name]:
+                            property[:] = []
+                            updated_properties[property_name] = True
 
-                if "platforms" in profile:
-                    if not has_platforms:
-                        self.platforms = []
-                        has_platforms = True
-                    append_unique(
-                        self.platforms,
-                        (ShaderPlatform[p] for p in profile["platforms"]),
-                    )
-
-                if "merge_source" in profile:
-                    if not has_merge:
-                        self.merge_source = []
-                        has_merge = True
-                    append_unique(self.merge_source, profile["merge_source"])
-
-                if "include_patterns" in profile:
-                    if not has_include_pattern:
-                        self.include_patterns = []
-                        has_include_pattern = True
-                    patterns = profile["include_patterns"]
-                    append_unique(
-                        self.include_patterns,
-                        [patterns] if type(patterns) == str else patterns,
-                    )
-
-                if "exclude_patterns" in profile:
-                    if not has_exclude_pattern:
-                        self.exclude_patterns = []
-                        has_exclude_pattern = True
-                    patterns = profile["exclude_patterns"]
-                    append_unique(
-                        self.exclude_patterns,
-                        [patterns] if type(patterns) == str else patterns,
-                    )
+                        values = value_getter(profile[property_name])
+                        property.extend(
+                            (item for item in values if item not in property)
+                        )
 
         if "base_profile" in json_data:
             base_profile = json_data["base_profile"]
-            if "macros" in base_profile and not has_macros:
-                self.macros = [
-                    MacroDefine.from_string(m) for m in base_profile["macros"]
-                ]
 
-            if "platforms" in base_profile and not has_platforms:
-                self.platforms = [ShaderPlatform[p] for p in base_profile["platforms"]]
-
-            if "merge_source" in base_profile and not has_merge:
-                self.merge_source = base_profile["merge_source"]
-
-            if "include_patterns" in base_profile and not has_include_pattern:
-                patterns = base_profile["include_patterns"]
-                self.include_patterns = (
-                    [patterns] if type(patterns) == str else patterns
-                )
-
-            if "exclude_patterns" in base_profile and not has_exclude_pattern:
-                patterns = base_profile["exclude_patterns"]
-                self.exclude_patterns = (
-                    [patterns] if type(patterns) == str else patterns
-                )
+            for property, property_name, value_getter in properties:
+                if (
+                    property_name in base_profile
+                    and not updated_properties[property_name]
+                ):
+                    property[:] = value_getter(base_profile[property_name])
 
         new_merge_source = []
         for merge_path in self.merge_source:
-            merge_path = os.path.normpath(
-                os.path.join(os.path.split(path)[0], merge_path)
-            )
+            merge_path = os.path.normpath(os.path.join(project_folder, merge_path))
             if (
                 os.path.isfile(merge_path)
                 and merge_path not in new_merge_source

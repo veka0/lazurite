@@ -42,6 +42,7 @@ class DxcCompiler:
         platform: ShaderPlatform = ShaderPlatform.Direct3D_SM65,
         stage: ShaderStage = ShaderStage.Compute,
         entry_point: str = None,
+        include: list[str] = None,
         defines: list[MacroDefine] = None,
         options: list[str] = None,
     ):
@@ -63,6 +64,10 @@ class DxcCompiler:
 
         if entry_point:
             args.extend(("-E", entry_point))
+
+        if include:
+            for item in include:
+                args.extend(("-I", item))
 
         if defines:
             for define in defines:

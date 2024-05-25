@@ -635,6 +635,8 @@ def _preprocess_shader(shader: str):
 
     shader = re.sub(r"^#version\s.+?\n", "", shader)
 
+    # TODO: Missing some samplers like `uniform lowp sampler2DArray s_WaterSurfaceDepthTextures`
+    # (also missing from from bgfx_shader.sh)
     samplers = [
         (r"lowp sampler2D", r"SAMPLER2D"),
         (r"highp sampler2DMS", r"SAMPLER2DMS"),
