@@ -16,16 +16,16 @@ python -m lazurite COMMAND [INPUTS ...] [ARGUMENTS ...]
 
 Here is a cheatsheet of what each command does
 
-| Command                                | Description                                                                                                    |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [**unpack**](commands.md#unpack)       | Unpacks input materials                                                                                        |
-| [**pack**](commands.md#pack)           | Packs materials back into `material.bin` files                                                                 |
-| [**label**](commands.md#label)         | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)                                |
-| [**clear**](commands.md#clear)         | Clears compiled shaders in materials, while removing encryption                                                |
-| [**restore**](commands.md#restore)     | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials                   |
-| [**build**](commands.md#build)         | Compiles all materials and shaders in a project                                                                |
-| [**info**](commands.md#info)           | Displays useful information about input material                                                               |
-| [**serialize**](commands.md#serialize) | Generates minimal json from material bin files that can be used as a [merge source](project.md#profile-schema) |
+| Command                                | Description                                                                                                  |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| [**unpack**](commands.md#unpack)       | Unpacks input materials                                                                                      |
+| [**pack**](commands.md#pack)           | Packs materials back into `material.bin` files                                                               |
+| [**label**](commands.md#label)         | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)                              |
+| [**clear**](commands.md#clear)         | Clears compiled shaders in materials, while removing encryption                                              |
+| [**restore**](commands.md#restore)     | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials                 |
+| [**build**](commands.md#build)         | Compiles all materials and shaders in a project                                                              |
+| [**info**](commands.md#info)           | Displays useful information about input material                                                             |
+| [**serialize**](commands.md#serialize) | Generates minimal json from material bin files that can be used as [merge source](project.md#profile-schema) |
 
 ## unpack
 
