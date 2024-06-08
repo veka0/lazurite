@@ -25,6 +25,17 @@ or
 python -m pip install lazurite
 ```
 
+!!!tip "Optional GLSL validator"
+
+    If you install lazurite with a command:
+    ```sh
+    pip install lazurite[opengl]
+    ```
+    it will enable optional GLSL and ESSL shader validation capability when compiling materials. It will try to compile and verify resulting code via OpenGL API,
+    which will allow you to catch errors that you wouldn't see otherwise.
+
+    Note: this capability is not supported on Termux out of the box.
+
 ???warning "Termux installation error"
 
     If during Lazurite installation on Termux (Android) you encounter this error:

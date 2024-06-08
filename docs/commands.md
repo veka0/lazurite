@@ -16,15 +16,16 @@ python -m lazurite COMMAND [INPUTS ...] [ARGUMENTS ...]
 
 Here is a cheatsheet of what each command does
 
-| Command                            | Description                                                                                  |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- |
-| [**unpack**](commands.md#unpack)   | Unpacks input materials                                                                      |
-| [**pack**](commands.md#pack)       | Packs materials back into `material.bin` files                                               |
-| [**label**](commands.md#label)     | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)              |
-| [**clear**](commands.md#clear)     | Clears compiled shaders in materials, while removing encryption                              |
-| [**restore**](commands.md#restore) | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials |
-| [**build**](commands.md#build)     | Compiles all materials and shaders in a project                                              |
-| [**info**](commands.md#info)       | Displays useful information about input material                                             |
+| Command                                | Description                                                                                                    |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [**unpack**](commands.md#unpack)       | Unpacks input materials                                                                                        |
+| [**pack**](commands.md#pack)           | Packs materials back into `material.bin` files                                                                 |
+| [**label**](commands.md#label)         | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)                                |
+| [**clear**](commands.md#clear)         | Clears compiled shaders in materials, while removing encryption                                                |
+| [**restore**](commands.md#restore)     | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials                   |
+| [**build**](commands.md#build)         | Compiles all materials and shaders in a project                                                                |
+| [**info**](commands.md#info)           | Displays useful information about input material                                                               |
+| [**serialize**](commands.md#serialize) | Generates minimal json from material bin files that can be used as a [merge source](project.md#profile-schema) |
 
 ## unpack
 
@@ -223,19 +224,22 @@ This command will restore BGFX SC for `RenderChunk.material.bin` and for all mat
 ## build
 
 ```sh
-lazurite build [PROJECTS ...] [--max-workers WORKERS] [--dxc DXC] [--shaderc SHADERC] [--dxc-args [ARGS ...]] [--shaderc-args [ARGS ...]] [-p [PROFILES ...]] [-d [DEFINES ...]] [-o OUTPUT]
+lazurite build [PROJECTS ...] [--max-workers WORKERS] [--dxc DXC] [--shaderc SHADERC] [--dxc-args [ARGS ...]] [--shaderc-args [ARGS ...]] [-p [PROFILES ...]] [-d [DEFINES ...]] [-m [MATERIALS ...]] [-e [EXCLUDE ...]] [-o OUTPUT]
 ```
 
-| Argument         | Description                                            | Default                                            |
-| ---------------- | ------------------------------------------------------ | -------------------------------------------------- |
-| `-o` `--output`  | Output folder, where compiled materials will be stored | project directory                                  |
-| `--max-workers`  | Maximum number of threads (compiler instances) to use  | CPU cores times 5                                  |
-| `--dxc`          | DXC compiler command                                   | Tries to execute `dxc` first, then `./dxc`         |
-| `--dxc-args`     | DXC arguments                                          |                                                    |
-| `--shaderc`      | SHADERC compiler command                               | Tries to execute `shaderc` first, then `./shaderc` |
-| `--shaderc-args` | SHADERC arguments                                      |                                                    |
-| `-p` `--profile` | List of profiles (e.g. `-p debug, windows, preview`)   |                                                    |
-| `-d` `--defines` | List of defines (e.g. `-d DEBUG, "SAMPLES 10"`)        |                                                    |
+| Argument            | Description                                                                                                                                                         | Default                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `-o` `--output`     | Output folder, where compiled materials will be stored                                                                                                              | project directory                                  |
+| `--max-workers`     | Maximum number of threads (compiler instances) to use                                                                                                               | CPU cores times 5                                  |
+| `--dxc`             | DXC compiler command                                                                                                                                                | Tries to execute `dxc` first, then `./dxc`         |
+| `--dxc-args`        | DXC arguments                                                                                                                                                       |                                                    |
+| `--shaderc`         | SHADERC compiler command                                                                                                                                            | Tries to execute `shaderc` first, then `./shaderc` |
+| `--shaderc-args`    | SHADERC arguments                                                                                                                                                   |                                                    |
+| `-p` `--profile`    | List of profiles (e.g. `-p debug, windows, preview`)                                                                                                                |                                                    |
+| `-d` `--defines`    | List of defines (e.g. `-d DEBUG, "SAMPLES 10"`)                                                                                                                     |                                                    |
+| `-m` `--materials`  | List of glob file path patterns that will be compiled as materials when building a project (overwrites `include_patterns` and `exclude_patterns`)                   |                                                    |
+| `-e` `--exclude`    | List of glob file path patterns that will be excluded during project compilation (works with `--materials`, addtive with `exclude_patterns`)                        |                                                    |
+| `--skip-validation` | Do not attempt to validate GLSL or ESSL shaders (note that validation requires lazurite to be [installed](index.md#installation) as `pip install lazurite[opengl]`) |                                                    |
 
 Compiles all materials from input project paths into output directory (or into project folders, if `--output` is not specified).
 See [projects documentation](project.md) for more details.
@@ -393,3 +397,30 @@ Uniforms (6):
   - vec4 BlockBaseAmbientLightColorIntensity
   - mat4 Bones[8]
 ```
+
+## serialize
+
+```sh
+lazurite serialize [MATERIALS ...] [-o OUTPUT]
+```
+
+| Argument        | Description                                                          | Default           |
+| --------------- | -------------------------------------------------------------------- | ----------------- |
+| `-o` `--output` | Output folder, where generated `.material.json` files will be stored | current directory |
+
+Converts input material bin files into minimal json files, one file per material. Those files
+can be used as a merge source for [build](commands.md#build) command, when compiling a project.
+
+Generated json files only contain information that is necessary for compilation and nothing else, so
+they are quite lightweight. All material properties are sorted alphabetically which makes generated files
+invariant to changes in property sorting that occasionally occur with game updates. Sorting and small size
+makes this file format perfect for storing material merge source in version control systems such as GitHub.
+
+Example usage
+
+```sh
+lazurite serialize RenderChunk.material.bin folderWithMaterials/ -o outputFolder/
+```
+
+This command will generate json files for `RenderChunk.material.bin` and all materials from `folderWithMaterials/`
+and save them in the `outputFolder/`.

@@ -33,16 +33,18 @@ Custom profiles can be activated when using a [build](commands.md#build) command
     "macros": ["DEBUG", "FOCAL_LENGTH 12.5"],
     "platforms": ["Direct3D_SM65", "ESSL_310"],
     "merge_source": ["../../vanilla/windows/"],
-    "include_patterns": "*",
-    "exclude_patterns": [".*", "_*"]
+    "include_patterns": ["*"],
+    "exclude_patterns": [".*", "_*"],
+    "include_search_paths": ["include"]
   },
   "profiles": {
     "profileExample": {
       "macros": ["DEBUG", "FOCAL_LENGTH 12.5"],
       "platforms": ["Direct3D_SM65", "ESSL_310"],
       "merge_source": ["../../vanilla/windows/"],
-      "include_patterns": "*",
-      "exclude_patterns": [".*", "_*"]
+      "include_patterns": ["*"],
+      "exclude_patterns": [".*", "_*"],
+      "include_search_paths": ["include"]
     }
   }
 }
@@ -55,13 +57,14 @@ Custom profiles can be activated when using a [build](commands.md#build) command
 
 #### Profile schema
 
-| Property           | Description                                                                                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `macros`           | List of macros                                                                                                                                   |
-| `platforms`        | List of [platforms](platforms.md) targetted by the project                                                                                       |
-| `merge_source`     | List of individual materials or folders with materials that will be used for merging                                                             |
-| `include_patterns` | Glob patterns (string or list of strings) used for searching material folders in a project, by default `["*"]`                                   |
-| `exclude_patterns` | Glob patterns (string or list of strings) that exclude folders in a project from being considered as material folders, by default `[".*", "_*"]` |
+| Property               | Description                                                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `macros`               | List of macros                                                                                                                                                          |
+| `platforms`            | List of [platforms](platforms.md) targetted by the project                                                                                                              |
+| `merge_source`         | List of individual materials or folders with materials that will be used for merging. Supports both `.material.bin` and [`.material.json`](commands.md#serialize) files |
+| `include_patterns`     | List of glob patterns used for searching material folders in a project, by default `["*"]`                                                                              |
+| `exclude_patterns`     | List of glob patterns that exclude folders in a project from being considered as material folders, by default `[".*", "_*"]`                                            |
+| `include_search_paths` | List of `#include` search paths                                                                                                                                         |
 
 !!!info "Glob patterns"
 
