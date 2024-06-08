@@ -1,5 +1,11 @@
-import os, pyjson5, pcpp, pathlib
+import os, pyjson5, pcpp, pathlib, sys
 from concurrent.futures import ThreadPoolExecutor
+
+# Try importing optional dependency.
+try:
+    import moderngl
+except ImportError:
+    pass
 
 from .material_config import MaterialConfig
 from .compiler_type import CompilerType
@@ -207,6 +213,39 @@ def _get_material_folders(proj_config: ProjectConfig, project_path: str):
     return sorted(list(material_folders))
 
 
+def _validate_glsl_code(
+    shader: ShaderDefinition,
+    opengl_context: "moderngl.Context",
+    defines: list[MacroDefine],
+):
+    code = shader.bgfx_shader.shader_bytes.decode()
+
+    # Hacky solution for explicitly specifying GLSL version.
+    if not code.startswith("#version"):
+        code = f"#version {shader.platform.name[-3:]}\n" + code
+
+    # Try to compile GLSL shader.
+    try:
+        if shader.stage is ShaderStage.Compute:
+            opengl_context.compute_shader(code)
+        elif shader.stage is ShaderStage.Vertex:
+            opengl_context.program(vertex_shader=code)
+        else:
+            opengl_context.program(fragment_shader=code)
+    except moderngl.Error as e:
+        log = list(e.args)
+        log.extend(
+            (
+                f"Stage: {shader.stage.name}",
+                f"Platform: {shader.platform.name}",
+                f"Defines: {[d.format_cpp() for d in defines]}",
+            )
+        )
+
+        log = "\n".join(log)
+        raise Exception(log) from None
+
+
 def compile(
     project_path: str,
     profiles: list[str],
@@ -219,6 +258,7 @@ def compile(
     shaderc_args: list[str] = None,
     dxc_args: list[str] = None,
     max_workers: int = None,
+    validate: bool = True,
 ):
     if not os.path.isdir(project_path):
         raise Exception(f'Failed to compile project: "{project_path}" is not a folder.')
@@ -250,6 +290,9 @@ def compile(
 
     shaderc_compiler: ShadercCompiler = None
     dxc_compiler: DxcCompiler = None
+    opengl_context: "moderngl.Context" = None
+
+    validate_glsl_code = validate and "moderngl" in sys.modules
 
     # {path: (name, {platforms})}
     material_cache: dict[str, tuple[str, set[ShaderPlatform]]] = {}
@@ -382,9 +425,18 @@ def compile(
                     len(shaders) * [mat_config.compiler_options + dxc_args],
                 )
 
-        for shader, result in zip(shaders, results):
+        for i, (shader, result) in enumerate(zip(shaders, results)):
             if mat_config.compiler_type is CompilerType.SHADERC:
                 shader.bgfx_shader = result
+
+                if validate_glsl_code and shader.platform.name.startswith(
+                    ("GLSL", "ESSL")
+                ):
+                    if opengl_context is None:
+                        opengl_context = moderngl.create_context(standalone=True)
+
+                    _validate_glsl_code(shader, opengl_context, arg_defines[i])
+
             else:
                 shader.bgfx_shader.shader_bytes = result
 

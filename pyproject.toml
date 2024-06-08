@@ -30,6 +30,9 @@ classifiers = [
 ]
 dependencies = ["pyjson5", "myers", "pcpp", "pycryptodome", "sympy"]
 
+[project.optional-dependencies]
+opengl = ["moderngl"]
+
 
 [project.urls]
 Documentation = "https://veka0.github.io/lazurite"

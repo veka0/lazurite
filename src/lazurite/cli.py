@@ -201,6 +201,7 @@ def build(args):
             args.shaderc_args,
             args.dxc_args,
             args.max_workers or None,
+            not args.skip_validation,
         )
 
 
@@ -425,6 +426,11 @@ def main():
         nargs="*",
         default=[],
         help="Additional DXC compiler arguments",
+    )
+    group.add_argument(
+        "--skip-validation",
+        action="store_true",
+        help="Do not validate compiled GLSL and ESSL code.",
     )
 
     # Execute command.
