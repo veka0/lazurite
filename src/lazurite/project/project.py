@@ -222,7 +222,10 @@ def _validate_glsl_code(
 
     # Hacky solution for explicitly specifying GLSL version.
     if not code.startswith("#version"):
-        code = f"#version {shader.platform.name[-3:]}\n" + code
+        version_string = shader.platform.name[-3:]
+        if shader.platform in (ShaderPlatform.ESSL_300, ShaderPlatform.ESSL_310):
+            version_string += " es"
+        code = f"#version {version_string}\n" + code
 
     # Try to compile GLSL shader.
     try:
