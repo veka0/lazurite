@@ -290,6 +290,21 @@ def info(args):
         print(_format_info(info))
 
 
+def serialize(args):
+    for file in list_packed_materials(args):
+        file_name: str = os.path.basename(file).removesuffix(Material.EXTENSION)
+        print(file_name)
+
+        material = Material.load_bin_file(file)
+
+        material.buffers.sort(key=lambda x: x.name)
+        material.uniforms.sort(key=lambda x: x.name)
+        material.passes.sort(key=lambda x: x.name)
+        material.sort_variants()
+
+        material.store_minimal(file_name, args.output)
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="lazurite",
@@ -297,8 +312,6 @@ def main():
         epilog="For more information, see documentation at https://veka0.github.io/lazurite/",
     )
 
-    # TODO: add `serialize` command for generating material json data,
-    # as alternative (version control friendly) merge source instead of material.bin files
     commands = {
         "unpack": unpack,
         "pack": pack,
@@ -307,6 +320,7 @@ def main():
         "build": build,
         "info": info,
         "clear": clear,
+        "serialize": serialize,
         # "project",  # not implemented
         # "config",  # not implemented
     }

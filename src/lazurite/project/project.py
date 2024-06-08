@@ -27,18 +27,25 @@ def _merge_source_by_name(
     mat = None
     for platform in platforms:
         for path in merge_source:
+            is_binary_file = path.endswith(Material.EXTENSION)
             found_platform = False
             if path in cache:
                 cache_name, cache_platforms = cache[path]
                 if cache_name == name and platform in cache_platforms:
                     found_platform = True
-                    temp_mat = Material.load_bin_file(path)
+                    if is_binary_file:
+                        temp_mat = Material.load_bin_file(path)
+                    else:
+                        temp_mat = Material.load_minimal_json(path)
                     if mat is None:
                         mat = temp_mat
                     else:
                         mat.merge_variants(temp_mat)
             else:
-                temp_mat = Material.load_bin_file(path)
+                if is_binary_file:
+                    temp_mat = Material.load_bin_file(path)
+                else:
+                    temp_mat = Material.load_minimal_json(path)
                 mat_platforms = temp_mat.get_platforms()
                 if temp_mat.name == name and platform in mat_platforms:
                     found_platform = True
@@ -61,19 +68,31 @@ def _merge_source_by_path(
     mat = None
     for platform in platforms:
         for path in merge_source:
-            if os.path.basename(path) != name:
+            if os.path.basename(path) not in (
+                name + ext for ext in (Material.EXTENSION, Material.JSON_EXTENSION)
+            ):
                 continue
+            is_binary_file = path.endswith(Material.EXTENSION)
             found_platform = False
             if path in cache:
                 if platform in cache[path][1]:
                     found_platform = True
-                    temp_mat = Material.load_bin_file(path)
+
+                    if is_binary_file:
+                        temp_mat = Material.load_bin_file(path)
+                    else:
+                        temp_mat = Material.load_minimal_json(path)
+
                     if mat is None:
                         mat = temp_mat
                     else:
                         mat.merge_variants(temp_mat)
             else:
-                temp_mat = Material.load_bin_file(path)
+                if is_binary_file:
+                    temp_mat = Material.load_bin_file(path)
+                else:
+                    temp_mat = Material.load_minimal_json(path)
+
                 mat_platforms = temp_mat.get_platforms()
                 if platform in mat_platforms:
                     found_platform = True
@@ -93,7 +112,7 @@ def _merge_source_materials(
     merge_source: list[str],
     material_cache: dict[str, tuple[str, set[ShaderPlatform]]],
 ):
-    name = mat_dir.name + Material.EXTENSION
+    name = mat_dir.name
     use_name = False
     path = os.path.join(mat_dir, "material.json")
     if os.path.isfile(path):

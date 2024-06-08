@@ -77,10 +77,51 @@ class Pass:
         obj["default_variant"] = self.default_variant
         obj["variants"] = []
 
-        for i in range(len(self.variants)):
-            obj["variants"].append(self.variants[i].serialize_properties(i))
+        for i, variant in enumerate(self.variants):
+            obj["variants"].append(variant.serialize_properties(i))
 
         return obj
+
+    def serialize_minimal(self, flag_definitions: dict[str, list[str]]):
+        obj = [
+            self.name,
+            self.supported_platforms.get_bit_string(),
+            self.fallback_pass,
+            (
+                self.default_blend_mode.value
+                if self.default_blend_mode != BlendMode.Unspecified
+                else ""
+            ),
+            {
+                list(flag_definitions.keys()).index(x): flag_definitions[x].index(y)
+                for x, y in self.default_variant.items()
+            },
+        ]
+
+        variants = []
+        for variant in self.variants:
+            variants.append(variant.serialize_minimal(flag_definitions))
+        obj.append(variants)
+
+        return obj
+
+    def load_minimal(self, object: dict, flag_definitions: dict[str, list[str]]):
+        self.name = object[0]
+        self.supported_platforms = SupportedPlatforms(object[1])
+        self.fallback_pass = object[2]
+        mode = object[3]
+        self.default_blend_mode = BlendMode(mode) if mode else BlendMode.Unspecified
+
+        flag_keys = list(flag_definitions.keys())
+        self.default_variant = {
+            flag_keys[int(x)]: flag_definitions[flag_keys[int(x)]][y]
+            for x, y in object[4].items()
+        }
+
+        self.variants = [
+            Variant().load_minimal(variant, flag_definitions) for variant in object[5]
+        ]
+        return self
 
     def store(self, path: str = ".", skip_shaders=False):
         pass_dir = os.path.join(path, self.name)

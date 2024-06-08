@@ -33,8 +33,8 @@ class Buffer:
         struct: str
         size: int
 
-        def __init__(self, name="", size=0):
-            self.struct = name
+        def __init__(self, struct="", size=0):
+            self.struct = struct
             self.size = size
 
     name: str
@@ -143,6 +143,43 @@ class Buffer:
         with open(os.path.join(path, f"{self.name}.json"), "w") as f:
             json.dump(self.serialize_properties(), f, indent=4)
 
+        return self
+
+    def serialize_minimal(self):
+        obj = [
+            self.name,
+            self.reg1,
+            self.reg2,
+            self.type.value,
+            self.precision.value,
+            self.access.value,
+            self.texture_format,
+            self.default_texture,
+            int(self.unordered_access),
+            self.always_one,
+            self.unknown_string,
+        ]
+        if self.custom_type_info != None:
+            obj.append(self.custom_type_info.struct)
+            obj.append(self.custom_type_info.size)
+
+        return obj
+
+    def load_minimal(self, object: list):
+        self.name = object[0]
+        self.reg1 = object[1]
+        self.reg2 = object[2]
+        self.type = BufferType(object[3])
+        self.precision = Precision(object[4])
+        self.access = BufferAccess(object[5])
+        self.texture_format = object[6]
+        self.default_texture = object[7]
+        self.unordered_access = bool(object[8])
+        self.always_one = object[9]
+        self.unknown_string = object[10]
+
+        if len(object) > 11:
+            self.custom_type_info = Buffer.CustomTypeInfo(object[11], object[12])
         return self
 
     def load(self, object: dict, path: str):

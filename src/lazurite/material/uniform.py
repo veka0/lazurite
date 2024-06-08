@@ -81,6 +81,16 @@ class Uniform:
 
         return self
 
+    def serialize_minimal(self):
+        return [self.name, self.type.value, self.count, self.default]
+
+    def load_minimal(self, object: dict):
+        self.name = object[0]
+        self.type = UniformType(object[1])
+        self.count = object[2]
+        self.default = object[3]
+        return self
+
     def load(self, object: dict, path: str):
         self.name = object.get("name", self.name)
         self.type = UniformType[object.get("type", self.type.name)]

@@ -101,7 +101,10 @@ class ProjectConfig:
             if (
                 os.path.isfile(merge_path)
                 and merge_path not in new_merge_source
-                and merge_path.endswith(Material.EXTENSION)
+                and any(
+                    merge_path.endswith(x)
+                    for x in (Material.EXTENSION, Material.JSON_EXTENSION)
+                )
             ):
                 new_merge_source.append(merge_path)
             elif os.path.isdir(merge_path):
@@ -109,7 +112,10 @@ class ProjectConfig:
                     if (
                         mat_dir.is_file()
                         and mat_dir.path not in new_merge_source
-                        and mat_dir.path.endswith(Material.EXTENSION)
+                        and any(
+                            mat_dir.path.endswith(x)
+                            for x in (Material.EXTENSION, Material.JSON_EXTENSION)
+                        )
                     ):
                         new_merge_source.append(mat_dir.path)
             else:

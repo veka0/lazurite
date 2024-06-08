@@ -75,6 +75,17 @@ class ShaderDefinition:
         obj["bgfx_shader"] = self.bgfx_shader.serialize_properties()
         return obj
 
+    def serialize_minimal(self):
+        return [
+            self.stage.value,
+            self.platform.value,
+        ]
+
+    def load_minimal(self, object: list):
+        self.stage = ShaderStage(object[0])
+        self.platform = ShaderPlatform(object[1])
+        return self
+
     def load(self, object: dict, path: str):
         self.stage = ShaderStage[object["stage"]]
         self.platform = ShaderPlatform[object["platform"]]

@@ -90,6 +90,14 @@ class ShaderInput:
     precision: Precision
     interpolation: Interpolation
 
+    def __init__(self) -> None:
+        self.name = ""
+        self.type = InputType.float
+        self.semantic = InputSemantic()
+        self.per_instance = False
+        self.precision = Precision.none
+        self.interpolation = Interpolation.none
+
     def __eq__(self, __value: object) -> bool:
         if type(__value) != ShaderInput:
             return False

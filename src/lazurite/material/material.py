@@ -21,6 +21,7 @@ from .encryption import EncryptionType
 class Material:
     MAGIC = 168942106
     EXTENSION = ".material.bin"
+    JSON_EXTENSION = ".material.json"
     COMPILED_MATERIAL_DEFINITION = "RenderDragon.CompiledMaterialDefinition"
     VERSION = 22
 
@@ -194,6 +195,66 @@ class Material:
             args = [True] if skip_shaders else []
             for item in item_list:
                 item.store(subfolder_dir, *args)
+
+    def serialize_minimal(self):
+        """
+        Returns a single minimal json dictionary with only material properties necessary for merge source.
+        """
+        flag_defs = self.get_flag_definitions()
+        flag_defs = {x: list(y) for x, y in flag_defs.items()}
+        for v in flag_defs.values():
+            v.sort()
+
+        json = [
+            self.version,
+            self.name,
+            self.parent,
+            flag_defs,
+            [buffer.serialize_minimal() for buffer in self.buffers],
+            [uniform.serialize_minimal() for uniform in self.uniforms],
+            [render_pass.serialize_minimal(flag_defs) for render_pass in self.passes],
+        ]
+        return json
+
+    def load_minimal(self, object: list):
+        """
+        Loads minimal json.
+        """
+        self.version = object[0]
+        self.name = object[1]
+        self.parent = object[2]
+        flag_defs = object[3]
+
+        self.buffers = [Buffer().load_minimal(i) for i in object[4]]
+        self.uniforms = [Uniform().load_minimal(i) for i in object[5]]
+        self.passes = [Pass().load_minimal(i, flag_defs) for i in object[6]]
+
+    def store_minimal(self, name: str, path: str = "."):
+        """
+        Stores a single minimal json dictionary with only material properties necessary for merge source.
+        """
+        json_path = os.path.join(path, name + Material.JSON_EXTENSION)
+        with open(json_path, "w") as f:
+            json.dump(
+                self.serialize_minimal(),
+                f,
+                separators=(",", ":"),
+            )
+
+    @classmethod
+    def load_minimal_json(cls, path: str):
+        """
+        Creates a material definition from minimal json file at specified path.
+        """
+        if os.path.isfile(path):
+            material = cls()
+            with open(path) as f:
+                material.load_minimal(pyjson5.load(f))
+            return material
+        else:
+            raise Exception(
+                f'Failed to load material json at "{path}", it\'s not a file'
+            )
 
     @classmethod
     def load_bin_file(cls, path: str):

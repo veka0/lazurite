@@ -54,6 +54,28 @@ class Variant:
 
         return obj
 
+    def serialize_minimal(self, flag_definitions: dict[str, list[str]]):
+        return [
+            int(self.is_supported),
+            {
+                list(flag_definitions.keys()).index(x): flag_definitions[x].index(y)
+                for x, y in self.flags.items()
+            },
+            [shader.serialize_minimal() for shader in self.shaders],
+        ]
+
+    def load_minimal(self, object: list, flag_definitions: dict[str, list[str]]):
+        self.is_supported = bool(object[0])
+
+        flag_keys = list(flag_definitions.keys())
+        self.flags = {
+            flag_keys[int(x)]: flag_definitions[flag_keys[int(x)]][y]
+            for x, y in object[1].items()
+        }
+
+        self.shaders = [ShaderDefinition().load_minimal(shader) for shader in object[2]]
+        return self
+
     def load(self, object: dict, path: str):
         self.is_supported = object.get("is_supported", self.is_supported)
         self.flags = object.get("flags", self.flags)
