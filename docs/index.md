@@ -25,16 +25,45 @@ or
 python -m pip install lazurite
 ```
 
-!!!tip "Optional GLSL validator"
+???tip "Optional GLSL validator"
 
     If you install lazurite with a command:
+
     ```sh
     pip install lazurite[opengl]
     ```
     it will enable optional GLSL and ESSL shader validation capability when compiling materials. It will try to compile and verify resulting code via OpenGL API,
     which will allow you to catch errors that you wouldn't see otherwise.
 
-    Note: this capability is not supported on Termux out of the box.
+    Note: this capability is not supported on Termux out of the box. See detailed instructions below.
+    ???info "GLSL validation on Termux"
+
+        Install necessary packages
+
+        ```sh
+        pgk i mesa xorgproto libx11 x11-repo && pkg i termux-x11-nightly
+        ```
+        Install lazurite
+
+        ```sh
+        pip install lazurite[opengl]
+        ```
+        Install Termux-x11 companion app from <https://github.com/termux/termux-x11> (see [Setup Instructions](https://github.com/termux/termux-x11?tab=readme-ov-file#setup-instructions))
+
+
+        Then start X11 server
+
+        ```sh
+        termux-x11 :1 &
+        ```
+
+        After that you can run lazurite build command, by prefixing it with `DISPLAY=:1` like so
+
+        ```sh
+        DISPLAY=:1 lazurite build myAwesomeShader
+        ```
+        You will need to launch X11 server before you intend to use GLSL validation capability. Note that the server will remain running in the background, and
+        most of the time you need to start it only once, when you begin a Termux session.
 
 ???warning "Termux installation error"
 
