@@ -35,7 +35,7 @@ python -m pip install lazurite
     it will enable optional GLSL and ESSL shader validation capability when compiling materials. It will try to compile and verify resulting code via OpenGL API,
     which will allow you to catch errors that you wouldn't see otherwise.
 
-    Note: this capability is not supported on Termux out of the box. See detailed instructions below.
+    Note: this capability is not supported on Termux out of the box and requires extra steps to get working, see instructions below for details:
     ???info "GLSL validation on Termux"
 
         Install necessary packages
