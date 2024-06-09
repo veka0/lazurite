@@ -313,7 +313,7 @@ save the compiled materials in the `output/` folder
     Which can be solved by copying required file into your home directory
 
     ```sh
-    cp /data/data/com.termux/files/usr/lib/libc++_shared.so ~/
+    cp $PREFIX/lib/libc++_shared.so ~/
     ```
 
     And referencing directory with your lib file in the lazurite command, by prefixing it with `LD_LIBRARY_PATH=<path to folder with libc++_shared.so>`
