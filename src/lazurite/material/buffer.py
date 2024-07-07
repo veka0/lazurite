@@ -19,7 +19,7 @@ class BufferType(Enum):
     external2D = 2  # ?
     texture3D = 3  # ?
     textureCube = 4
-    samplerCubeArray = 5
+    textureCubeArray = 5
     structBuffer = 6
     rawBuffer = 7
     accelerationStructure = 8  # ?
