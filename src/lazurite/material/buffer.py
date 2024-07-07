@@ -19,11 +19,13 @@ class BufferType(Enum):
     external2D = 2  # ?
     texture3D = 3  # ?
     textureCube = 4
-    structBuffer = 5
-    rawBuffer = 6
-    accelerationStructure = 7  # ?
-    shadow2D = 8
-    shadow2DArray = 9
+    samplerCubeArray = 5
+    structBuffer = 6
+    rawBuffer = 7
+    accelerationStructure = 8  # ?
+    shadow2D = 9
+    shadow2DArray = 10
+    # unknown = 11  # ?
 
     # ? -> never observed in-game
 
