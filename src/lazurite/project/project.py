@@ -296,7 +296,7 @@ def compile(
 
     proj_config = ProjectConfig()
     proj_config.read_json_file(os.path.join(project_path, "project.json"), profiles)
-    platforms_set = set(proj_config.platforms)
+    project_platforms = set(proj_config.platforms)
 
     if material_patterns:
         proj_config.include_patterns = [
@@ -339,7 +339,7 @@ def compile(
         mat_config.read_from_json_file(os.path.join(mat_dir, "config.json"))
 
         # Target platforms AND platforms supported by material.
-        compilable_platforms = platforms_set.intersection(
+        compilable_platforms = project_platforms.intersection(
             mat_config.supported_platforms
         )
 
@@ -368,14 +368,8 @@ def compile(
                 # but merge_source in project config is not empty.
                 print(f"Warning! Failed to find merge source for {mat_dir.name}")
 
-            # Add necessary platforms.
-            material.add_platforms(compilable_platforms)
-            # Remove other unwanted platforms.
-            material.remove_platforms(
-                set(ShaderPlatform).difference(compilable_platforms)
-            )
-        else:
-            material.add_platforms(compilable_platforms)
+        material.add_platforms(compilable_platforms)
+        material.remove_platforms(set(ShaderPlatform).difference(project_platforms))
 
         material.load_unpacked_material(mat_dir)
 
