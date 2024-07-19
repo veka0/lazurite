@@ -202,6 +202,7 @@ def build(args):
             args.dxc_args,
             args.max_workers or None,
             not args.skip_validation,
+            args.glslang,
         )
 
 
@@ -431,6 +432,9 @@ def main():
         "--skip-validation",
         action="store_true",
         help="Do not validate compiled GLSL and ESSL code.",
+    )
+    group.add_argument(
+        "--glslang", type=str, default=None, help="glslang validator command"
     )
 
     # Execute command.

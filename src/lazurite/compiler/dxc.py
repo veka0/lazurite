@@ -9,7 +9,7 @@ from .macro_define import MacroDefine
 class DxcCompiler:
     dxc_path: str
 
-    def __init__(self, dxc_paths: list[str] | str = None) -> None:
+    def __init__(self, dxc_paths: list[str] | str | None = None) -> None:
         if dxc_paths is None:
             dxc_paths = ["dxc", "./dxc"]
         elif isinstance(dxc_paths, str):

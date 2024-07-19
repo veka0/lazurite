@@ -11,7 +11,7 @@ from .macro_define import MacroDefine
 class ShadercCompiler:
     shaderc_path: str
 
-    def __init__(self, shaderc_paths: list[str] | str = None) -> None:
+    def __init__(self, shaderc_paths: list[str] | str | None = None) -> None:
         if shaderc_paths is None:
             shaderc_paths = ["shaderc", "./shaderc"]
         elif isinstance(shaderc_paths, str):

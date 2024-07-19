@@ -22,6 +22,7 @@ from lazurite.material.shader_pass import Pass
 from lazurite.material.shader_pass.variant import Variant
 from lazurite.material.shader_pass.shader_definition import ShaderDefinition
 from lazurite.tempfile import CustomTempFile
+from lazurite.compiler.glslang import Glslang
 
 
 def _merge_source_by_name(
@@ -134,6 +135,7 @@ def _merge_source_materials(
         return _merge_source_by_path(name, platforms, merge_source, material_cache)
 
 
+# TODO: add uniform array count macro
 def _generate_defines(
     config: ProjectConfig,
     material: Material,
@@ -145,6 +147,7 @@ def _generate_defines(
     if mat_config.compiler_type is CompilerType.SHADERC:
         defines.append(MacroDefine("BGFX_CONFIG_MAX_BONES", 4))
 
+    # TODO: remove `s_`, so that SSBOs in restored vanilla code can work right away.
     defines.extend(MacroDefine(f"s_{s.name}_REG", s.reg1) for s in material.buffers)
 
     if shader_pass.name in mat_config.macro_overwrite_pass:
@@ -173,6 +176,7 @@ def _compile_bgfx_shader_async(
     include: list[str],
     defines: list[MacroDefine],
     options: list[str],
+    glslang: Glslang | None,
 ):
     if stage == ShaderStage.Compute:
         compiled_shader = shaderc_compiler.compile(
@@ -192,11 +196,28 @@ def _compile_bgfx_shader_async(
         with CustomTempFile("w+") as f:
             parser.write(f)
             f.close()
-            # f.flush()
 
             compiled_shader = shaderc_compiler.compile(
                 code_path, platform, stage, f.name, include, defines, options
             )
+
+    if glslang:
+        code = compiled_shader.shader_bytes.decode()
+        code = util.insert_version_directive(code, platform)
+
+        try:
+            glslang.validate(code, platform, stage)
+        except Exception as e:
+            log = list(e.args)
+            log.extend(
+                (
+                    f"Stage: {stage.name}",
+                    f"Platform: {platform.name}",
+                    f"Defines: {[d.format_cpp() for d in defines]}",
+                )
+            )
+            log = "\n".join(log)
+            raise Exception(log) from None
 
     return compiled_shader
 
@@ -219,13 +240,7 @@ def _validate_glsl_code(
     defines: list[MacroDefine],
 ):
     code = shader.bgfx_shader.shader_bytes.decode()
-
-    # Hacky solution for explicitly specifying GLSL version.
-    if not code.startswith("#version"):
-        version_string = shader.platform.name[-3:]
-        if shader.platform in (ShaderPlatform.ESSL_300, ShaderPlatform.ESSL_310):
-            version_string += " es"
-        code = f"#version {version_string}\n" + code
+    code = util.insert_version_directive(code, shader.platform)
 
     # Try to compile GLSL shader.
     try:
@@ -249,19 +264,21 @@ def _validate_glsl_code(
         raise Exception(log) from None
 
 
+# TODO: switch material_patterns etc to project-relative paths for cleaner API.
 def compile(
     project_path: str,
-    profiles: list[str],
+    profiles: list[str] | None,
     output_folder: str = "",
-    material_patterns: list[str] = None,
-    exclude_material_patterns: list[str] = None,
+    material_patterns: list[str] | None = None,
+    exclude_material_patterns: list[str] | None = None,
     defines: list[MacroDefine] = None,
     shaderc_path: str = None,
     dxc_path: str = None,
-    shaderc_args: list[str] = None,
-    dxc_args: list[str] = None,
+    shaderc_args: list[str] | None = None,
+    dxc_args: list[str] | None = None,
     max_workers: int = None,
     validate: bool = True,
+    glslang_path: str = None,
 ):
     if not os.path.isdir(project_path):
         raise Exception(f'Failed to compile project: "{project_path}" is not a folder.')
@@ -291,11 +308,18 @@ def compile(
             (os.path.relpath(m, project_path) for m in exclude_material_patterns)
         )
 
-    shaderc_compiler: ShadercCompiler = None
-    dxc_compiler: DxcCompiler = None
-    opengl_context: "moderngl.Context" = None
+    shaderc_compiler: ShadercCompiler | None = None
+    dxc_compiler: DxcCompiler | None = None
+    opengl_context: "moderngl.Context" | None = None
+    glslang: Glslang | None = None
 
-    validate_glsl_code = validate and "moderngl" in sys.modules
+    if validate:
+        try:
+            glslang = Glslang(glslang_path)
+        except:
+            pass
+
+    moderngl_validate = validate and "moderngl" in sys.modules
 
     # {path: (name, {platforms})}
     material_cache: dict[str, tuple[str, set[ShaderPlatform]]] = {}
@@ -415,6 +439,7 @@ def compile(
                     len(shaders) * [proj_config.include_search_paths],
                     arg_defines,
                     len(shaders) * [mat_config.compiler_options + shaderc_args],
+                    len(shaders) * [glslang],
                 )
             else:
                 results = executor.map(
@@ -432,7 +457,7 @@ def compile(
             if mat_config.compiler_type is CompilerType.SHADERC:
                 shader.bgfx_shader = result
 
-                if validate_glsl_code and shader.platform.name.startswith(
+                if moderngl_validate and shader.platform.name.startswith(
                     ("GLSL", "ESSL")
                 ):
                     if opengl_context is None:
