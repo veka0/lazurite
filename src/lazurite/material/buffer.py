@@ -6,6 +6,33 @@ from lazurite import util
 from .precision import Precision
 
 
+class TextureFilter(Enum):
+    Point = 0
+    Bilinear = 1
+
+
+class TextureWrap(Enum):
+    Clamp = 0
+    Repeat = 1
+
+
+class SamplerState:
+    filter: TextureFilter
+    wrapping: TextureWrap
+
+    def __init__(self, value=0) -> None:
+        if not 0 <= value <= 3:
+            raise Exception(
+                f"Sampler state intrinsic value {value} is outside of accepted range!"
+            )
+
+        self.filter = TextureFilter(value & 1)
+        self.wrapping = TextureWrap((value >> 1) & 1)
+
+    def get_value(self):
+        return self.filter.value | self.wrapping.value << 1
+
+
 class BufferAccess(Enum):
     undefined = 0
     readonly = 1
@@ -48,6 +75,7 @@ class Buffer:
     texture_format: str
     always_one: int
     reg2: int
+    sampler_state: SamplerState | None
     default_texture: str
     unknown_string: str
     custom_type_info: CustomTypeInfo | None
@@ -62,6 +90,7 @@ class Buffer:
         self.texture_format = ""
         self.always_one = 1
         self.reg2 = 0
+        self.sampler_state = None
         self.default_texture = ""
         self.unknown_string = ""
         self.custom_type_info = None
@@ -79,6 +108,9 @@ class Buffer:
         self.reg2 = util.read_ubyte(file)  # same as reg1
 
         if util.read_bool(file):
+            self.sampler_state = SamplerState(util.read_ubyte(file))
+
+        if util.read_bool(file):
             self.default_texture = util.read_string(file)  # white
         else:
             self.default_texture = ""
@@ -88,9 +120,9 @@ class Buffer:
             # print(self.unknown_string)  # TODO: remove
 
         if util.read_bool(file):  # CustomTypeInfo
-            self.custom_type_info = self.CustomTypeInfo()
-            self.custom_type_info.struct = util.read_string(file)
-            self.custom_type_info.size = util.read_ulong(file)
+            self.custom_type_info = self.CustomTypeInfo(
+                util.read_string(file), util.read_ulong(file)
+            )
 
         return self
 
@@ -105,6 +137,10 @@ class Buffer:
         util.write_ulong(file, self.always_one)
         util.write_ubyte(file, self.reg2)
 
+        util.write_bool(file, self.sampler_state is not None)
+        if self.sampler_state is not None:
+            util.write_ubyte(file, self.sampler_state.get_value())
+
         util.write_bool(file, self.default_texture != "")
         if self.default_texture != "":
             util.write_string(file, self.default_texture)
@@ -113,8 +149,8 @@ class Buffer:
         if self.unknown_string != "":
             util.write_string(file, self.unknown_string)
 
-        util.write_bool(file, self.custom_type_info != None)
-        if self.custom_type_info != None:
+        util.write_bool(file, self.custom_type_info is not None)
+        if self.custom_type_info is not None:
             util.write_string(file, self.custom_type_info.struct)
             util.write_ulong(file, self.custom_type_info.size)
 
@@ -133,11 +169,16 @@ class Buffer:
             "unordered_access": self.unordered_access,
             "always_one": self.always_one,
             "unknown_string": self.unknown_string,
+            "sampler_state": {},
             "custom_type_info": {},
         }
-        if self.custom_type_info != None:
+        if self.custom_type_info:
             obj["custom_type_info"]["struct"] = self.custom_type_info.struct
             obj["custom_type_info"]["size"] = self.custom_type_info.size
+
+        if self.sampler_state:
+            obj["sampler_state"]["filter"] = self.sampler_state.filter.name
+            obj["sampler_state"]["wrapping"] = self.sampler_state.wrapping.name
 
         return obj
 
@@ -160,6 +201,7 @@ class Buffer:
             int(self.unordered_access),
             self.always_one,
             self.unknown_string,
+            self.sampler_state.get_value() if self.sampler_state else -1,
         ]
         if self.custom_type_info != None:
             obj.append(self.custom_type_info.struct)
@@ -179,9 +221,10 @@ class Buffer:
         self.unordered_access = bool(object[8])
         self.always_one = object[9]
         self.unknown_string = object[10]
+        self.sampler_state = SamplerState(object[11]) if object[11] != -1 else None
 
-        if len(object) > 11:
-            self.custom_type_info = Buffer.CustomTypeInfo(object[11], object[12])
+        if len(object) > 12:
+            self.custom_type_info = Buffer.CustomTypeInfo(object[12], object[13])
         return self
 
     def load(self, object: dict, path: str):
@@ -198,18 +241,31 @@ class Buffer:
         self.default_texture = object.get("default_texture", self.default_texture)
 
         if "custom_type_info" in object:
-            if len(object["custom_type_info"]) > 0:
-                if self.custom_type_info == None:
+            obj = object["custom_type_info"]
+            if len(obj) > 0:
+                if not self.custom_type_info:
                     self.custom_type_info = self.CustomTypeInfo()
 
-                self.custom_type_info.struct = object["custom_type_info"].get(
+                self.custom_type_info.struct = obj.get(
                     "struct", self.custom_type_info.struct
                 )
-                self.custom_type_info.size = object["custom_type_info"].get(
-                    "size", self.custom_type_info.size
-                )
-
+                self.custom_type_info.size = obj.get("size", self.custom_type_info.size)
             else:
                 self.custom_type_info = None
+
+        if "sampler_state" in object:
+            obj = object["sampler_state"]
+            if len(obj) > 0:
+                if not self.sampler_state:
+                    self.sampler_state = SamplerState()
+
+                self.sampler_state.filter = TextureFilter[
+                    obj.get("filter", self.sampler_state.filter.name)
+                ]
+                self.sampler_state.wrapping = TextureWrap[
+                    obj.get("wrapping", self.sampler_state.wrapping.name)
+                ]
+            else:
+                self.sampler_state = None
 
         return self

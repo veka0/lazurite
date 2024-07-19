@@ -272,6 +272,14 @@ def info(args):
                     "Reg1": b.reg1,
                     "Reg2": b.reg2,
                     "Unordered Access": b.unordered_access,
+                    "Sampler State": (
+                        {
+                            "Texture Filter": b.sampler_state.filter.name,
+                            "Texture Wrap": b.sampler_state.wrapping.name,
+                        }
+                        if b.sampler_state
+                        else ""
+                    ),
                     "Custom Type Info": (
                         {
                             "Struct": b.custom_type_info.struct,
