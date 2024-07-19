@@ -146,7 +146,7 @@ def restore_single_material(args, file: str):
         return
 
     shader_codes = material.restore_shaders(
-        {ShaderPlatform.ESSL_310, ShaderPlatform.ESSL_300},
+        {ShaderPlatform.ESSL_310},
         set(ShaderStage),
         args.split_passes,
         args.merge_stages,
