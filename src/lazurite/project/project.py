@@ -201,7 +201,7 @@ def _compile_bgfx_shader_async(
                 code_path, platform, stage, f.name, include, defines, options
             )
 
-    if glslang:
+    if glslang and platform.name.startswith(("GLSL", "ESSL")):
         code = compiled_shader.shader_bytes.decode()
         code = util.insert_version_directive(code, platform)
 
