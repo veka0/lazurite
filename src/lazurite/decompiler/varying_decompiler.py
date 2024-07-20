@@ -19,10 +19,10 @@ def generate_varying_line(shader_input: ShaderInput, stage: ShaderStage):
     line = ""
     is_instance_data = False
 
-    if shader_input.interpolation != Interpolation.none:
-        line += shader_input.interpolation.name + " "
     if shader_input.precision != Precision.none:
         line += shader_input.precision.name + " "
+    if shader_input.interpolation != Interpolation.none:
+        line += shader_input.interpolation.name + " "
     line += shader_input.type.name + " "
     name = shader_input.name
     if name.startswith("instanceData"):
