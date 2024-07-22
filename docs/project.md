@@ -168,12 +168,13 @@ This file contains per-material compilaton settings.
 Platforms specified in project and material configs are very important during compilation. Think of project platforms as platforms that you wish to target with your project,
 while material platforms are platforms that a specific material can be compiled for. Project is compiled one material at a time.
 
-At first, lazurite loads and merges together materials from merge paths which have at least one platform from a list of `platforms` in project config. Materials are chosen for merging if they have the same material name,
+At first, lazurite loads and merges together all materials from merge paths which have at least one platform from a list of `platforms` in project config. Materials are chosen for merging if they have the same material name,
 if it's specified in material.json, otherwise they are merged if they have a base file name that matches folder name of the material in a project. Output material will always have the same file name as material folder in the project.
+If no materials with matching platforms can be found, it will instead merge materials with any platforms.
 
-If no materials with matching platforms can be found, it will instead merge materials with any platforms, add compilable platforms (platforms that are both in project and material configs) and remove any other platforms.
+If the final merged material doesn't have all compileable platforms (platforms that are both in project and material configs), remaining platforms will be added to it automatically, so having vanilla materials for every platform is not necessary and only one platform is enough. Any platforms that are not in the project config will be removed.
 
-If the final merged material doesn't have all compileable platforms, remaining platforms will be added to it automatically. So having vanilla materials for every platform is not necessary.
+As a result, final material will compile shaders only for platforms that are both in project and material configs and for the remaining platforms in project config, vanilla shaders will be used (if available in merge source materials).
 
 Then the resulting material gets additionally merged with any material data in the project material folder. This allows you to make any targetted changes that will overwrite properties of the final material.
 
@@ -204,3 +205,76 @@ in material.json with unwanted entries removed. A manual overwrite of material.j
 !!!warning "Encryption"
 
     If any of the merge sources for a specific material are encrypted, compiled material will also be encrypted. This is necessary to protect 3rd party IP, which in turn protects this project from potential legal action.
+
+## GLSL validation
+
+When compiling OpenGL shaders, shaderc doesn't always validate resulting code, especially when compiling for platforms that don't support GLSL optimization like ESSL 310.
+This could lead to improper shader code, which fails to compile on device and crashes the game. To avoid this, lazurite offsers multiple optional ways to validate your shader code
+during compilation.
+
+### Glslang
+
+Glslang is the official reference compiler front end for the OpenGL ES and OpenGL shading languages. It implements a strict interpretation of the specifications for these languages.
+
+When compiling a lazurite project, you can specify glslang path or command via `--glslang` argument in the [build](commands.md#build) command. Note that this argument has a default value, which would try to call `glslang`
+in the current directory.
+
+On Linux (or Termux), it can be installed from a package manager, for example
+
+```sh
+apt install glslang
+```
+
+On Windows and macOS, you can download glslang executables from [here](https://github.com/KhronosGroup/glslang/releases/tag/main-tot)
+
+### ModernGL
+
+[ModernGL](https://github.com/moderngl/moderngl) is a Python library that provides access to OpenGL API. Lazurite interfaces with OpenGL in order to try and compile
+resulting GLSL code and catch compilation errors, if any occur.
+
+ModernGL can be installed the same as any other Python library
+
+```sh
+pip install moderngl
+```
+
+Alternatively, you can install both lazurite and moderngl by running
+
+```sh
+pip install lazurite[opengl]
+```
+
+???warning "Running moderngl in Termux"
+
+    Moderngl doesn't work right out of the box in Termux, and requires extra steps to use and install.
+
+    Install necessary packages
+
+    ```sh
+    pgk i mesa xorgproto libx11 x11-repo && pkg i termux-x11-nightly
+    ```
+    Install lazurite
+
+    ```sh
+    pip install lazurite[opengl]
+    ```
+    Install Termux-x11 companion app from <https://github.com/termux/termux-x11> (see [Setup Instructions](https://github.com/termux/termux-x11?tab=readme-ov-file#setup-instructions))
+
+
+    Then start X11 server
+
+    ```sh
+    termux-x11 :1 &
+    ```
+
+    After that you can run lazurite build command, by prefixing it with `DISPLAY=:1` like so
+
+    ```sh
+    DISPLAY=:1 lazurite build myAwesomeShader
+    ```
+    You will need to launch X11 server before you intend to use GLSL validation capability. Note that the server will remain running in the background, and
+    most of the time you need to start it only once, when you begin a Termux session.
+
+Glslang enforces official GLSL specification which should work on all devices, although it may not [fully support](https://www.khronos.org/opengles/sdk/tools/Reference-Compiler)
+validation for all GLSL features in certain versions. ModernGL on the other hand compiles GLSL right on device, which means that it will use vendor specific validation, and may not catch errors that
+can occur on other devices, but it should support all GLSL features. It is therefore recommended to use both validators if possible.

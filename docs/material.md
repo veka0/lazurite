@@ -75,6 +75,10 @@ material.json
   "unordered_access": true,
   "always_one": 1,
   "unknown_string": "",
+  "sampler_state": {
+    "filter": "Point",
+    "wrapping": "Clamp"
+  },
   "custom_type_info": {
     "struct": "PBRTextureData",
     "size": 64
@@ -87,7 +91,7 @@ material.json
 | `name`                                             | Buffer name                                            | string                                                                                                                                                                  |                                                                                                                          |
 | `reg1`                                             | Register or binding                                    | integer                                                                                                                                                                 | Same as reg2                                                                                                             |
 | `reg2`                                             | Register or binding                                    | integer                                                                                                                                                                 | Same as reg1                                                                                                             |
-| `type`                                             | Buffer type                                            | `texture2D` `texture2DArray` `external2D` `texture3D` `textureCube` `structBuffer` `rawBuffer` `accelerationStructure` `shadow2D` `shadow2DArray`                       |                                                                                                                          |
+| `type`                                             | Buffer type                                            | `texture2D` `texture2DArray` `external2D` `texture3D` `textureCube` `textureCubeArray` `structBuffer` `rawBuffer` `accelerationStructure` `shadow2D` `shadow2DArray`    |                                                                                                                          |
 | `precision`                                        | Buffer precision                                       | `lowp` `mediump` `highp`                                                                                                                                                |                                                                                                                          |
 | `access`                                           | Buffer access type                                     | `undefined` `readonly` `writeonly` `readwrite`                                                                                                                          |                                                                                                                          |
 | `texture_format`                                   | Texture format                                         | Arbitrary string, possible values include (but not limited to): (empty string) `r32ui` `rg32ui` `rgba32ui` `r32f` `r16f` `rg16f` `rgba16f` `rgba8` `rg8` `r8` `rgba32f` | Possible values were extracted from [bgfx_compute.sh](https://github.com/bkaradzic/bgfx/blob/master/src/bgfx_compute.sh) |
@@ -95,11 +99,19 @@ material.json
 | `unordered_access`                                 | Enables unordered access (UBO)                         | bool                                                                                                                                                                    |                                                                                                                          |
 | `always_one`                                       | Unknown (must always be 1, otherwise buffer breaks)    | integer                                                                                                                                                                 | All materials have a value of 1                                                                                          |
 | `unknown_string`                                   | Unknown (was never observed in-game)                   | string (empty string means that the buffer doesn't have this property)                                                                                                  |                                                                                                                          |
+| [`sampler_state`](material.md#sampler_state)       | Overwrites sampler state properties                    | enum. If set to empty object `{}` that means that the buffer doesn't have this property                                                                                 |                                                                                                                          |
 | [`custom_type_info`](material.md#custom_type_info) | Information about custom structured buffer (SSBO) type | enum. If set to empty object `{}` that means that the buffer doesn't have this property                                                                                 |                                                                                                                          |
 
 ??? warning "Changing Buffer Registers"
 
     The difference between `reg1` and `reg2` is unknown, in the material files they always have the same value. Lazurite uses `reg1` for setting AUTOREG macros, however the game seems to be using `reg2` for deciding which register to actually use. Therefore it is recommended to set both properties when changing buffer register or binding.
+
+### sampler_state
+
+| Property   | Description      | Allowed values or types |
+| ---------- | ---------------- | ----------------------- |
+| `filter`   | Texture filter   | `Point` `Bilinear`      |
+| `wrapping` | Texture wrapping | `Clamp` `Repeat`        |
 
 ### custom_type_info
 
