@@ -7,6 +7,7 @@ from ..platform import ShaderPlatform
 from ..stage import ShaderStage
 from .blend_mode import BlendMode
 from .supported_platforms import SupportedPlatforms
+from .shader_input import ShaderInput
 
 
 class Pass:
@@ -82,7 +83,11 @@ class Pass:
 
         return obj
 
-    def serialize_minimal(self, flag_definitions: dict[str, list[str]]):
+    def serialize_minimal(
+        self,
+        flag_definitions: dict[str, list[str]],
+        input_definitions: list[ShaderInput],
+    ):
         obj = [
             self.name,
             self.supported_platforms.get_bit_string(),
@@ -100,12 +105,19 @@ class Pass:
 
         variants = []
         for variant in self.variants:
-            variants.append(variant.serialize_minimal(flag_definitions))
+            variants.append(
+                variant.serialize_minimal(flag_definitions, input_definitions)
+            )
         obj.append(variants)
 
         return obj
 
-    def load_minimal(self, object: dict, flag_definitions: dict[str, list[str]]):
+    def load_minimal(
+        self,
+        object: dict,
+        flag_definitions: dict[str, list[str]],
+        input_definitions: list[ShaderInput],
+    ):
         self.name = object[0]
         self.supported_platforms = SupportedPlatforms(object[1])
         self.fallback_pass = object[2]
@@ -119,7 +131,8 @@ class Pass:
         }
 
         self.variants = [
-            Variant().load_minimal(variant, flag_definitions) for variant in object[5]
+            Variant().load_minimal(variant, flag_definitions, input_definitions)
+            for variant in object[5]
         ]
         return self
 

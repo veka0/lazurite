@@ -202,32 +202,49 @@ class Material:
         """
         flag_defs = self.get_flag_definitions()
         flag_defs = {x: list(y) for x, y in flag_defs.items()}
-        for v in flag_defs.values():
-            v.sort()
+        for values in flag_defs.values():
+            values.sort()
+
+        input_defs: list[ShaderInput] = []
+        for shader_pass in self.passes:
+            for variant in shader_pass.variants:
+                for shader in variant.shaders:
+                    for shader_input in shader.inputs:
+                        if shader_input not in input_defs:
+                            input_defs.append(shader_input)
+
+        input_defs.sort(
+            key=lambda x: f"{x.name}_{x.semantic.index}_{x.semantic.sub_index}"
+        )
 
         json = [
             self.version,
             self.name,
             self.parent,
             flag_defs,
+            [i.serialize_minimal() for i in input_defs],
             [buffer.serialize_minimal() for buffer in self.buffers],
             [uniform.serialize_minimal() for uniform in self.uniforms],
-            [render_pass.serialize_minimal(flag_defs) for render_pass in self.passes],
+            [
+                render_pass.serialize_minimal(flag_defs, input_defs)
+                for render_pass in self.passes
+            ],
         ]
         return json
 
-    def load_minimal(self, object: list):
+    def load_minimal(self, obj: list):
         """
         Loads minimal json.
         """
-        self.version = object[0]
-        self.name = object[1]
-        self.parent = object[2]
-        flag_defs = object[3]
+        self.version = obj[0]
+        self.name = obj[1]
+        self.parent = obj[2]
+        flag_defs = obj[3]
+        input_defs = [ShaderInput().load_minimal(i) for i in obj[4]]
 
-        self.buffers = [Buffer().load_minimal(i) for i in object[4]]
-        self.uniforms = [Uniform().load_minimal(i) for i in object[5]]
-        self.passes = [Pass().load_minimal(i, flag_defs) for i in object[6]]
+        self.buffers = [Buffer().load_minimal(i) for i in obj[5]]
+        self.uniforms = [Uniform().load_minimal(i) for i in obj[6]]
+        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[7]]
 
     def store_minimal(self, name: str, path: str = "."):
         """

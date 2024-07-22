@@ -6,6 +6,7 @@ from .shader_definition import ShaderDefinition
 from ..platform import ShaderPlatform
 from ..stage import ShaderStage
 from .bgfx_shader import BgfxShader
+from .shader_input import ShaderInput
 
 
 class Variant:
@@ -54,17 +55,26 @@ class Variant:
 
         return obj
 
-    def serialize_minimal(self, flag_definitions: dict[str, list[str]]):
+    def serialize_minimal(
+        self,
+        flag_definitions: dict[str, list[str]],
+        input_definitions: list[ShaderInput],
+    ):
         return [
             int(self.is_supported),
             {
                 list(flag_definitions.keys()).index(x): flag_definitions[x].index(y)
                 for x, y in self.flags.items()
             },
-            [shader.serialize_minimal() for shader in self.shaders],
+            [shader.serialize_minimal(input_definitions) for shader in self.shaders],
         ]
 
-    def load_minimal(self, object: list, flag_definitions: dict[str, list[str]]):
+    def load_minimal(
+        self,
+        object: list,
+        flag_definitions: dict[str, list[str]],
+        input_definitions: list[ShaderInput],
+    ):
         self.is_supported = bool(object[0])
 
         flag_keys = list(flag_definitions.keys())
@@ -73,7 +83,10 @@ class Variant:
             for x, y in object[1].items()
         }
 
-        self.shaders = [ShaderDefinition().load_minimal(shader) for shader in object[2]]
+        self.shaders = [
+            ShaderDefinition().load_minimal(shader, input_definitions)
+            for shader in object[2]
+        ]
         return self
 
     def load(self, object: dict, path: str):

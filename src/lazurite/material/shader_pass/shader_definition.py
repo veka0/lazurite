@@ -5,6 +5,7 @@ from ..platform import ShaderPlatform
 from ..stage import ShaderStage
 from .bgfx_shader import BgfxShader
 from .shader_input import ShaderInput
+import copy
 
 
 class ShaderDefinition:
@@ -75,15 +76,21 @@ class ShaderDefinition:
         obj["bgfx_shader"] = self.bgfx_shader.serialize_properties()
         return obj
 
-    def serialize_minimal(self):
+    def serialize_minimal(self, input_definitions: list[ShaderInput]):
         return [
             self.stage.value,
             self.platform.value,
+            [input_definitions.index(i) for i in self.inputs],
         ]
 
-    def load_minimal(self, object: list):
+    def load_minimal(
+        self,
+        object: list,
+        input_definitions: list[ShaderInput],
+    ):
         self.stage = ShaderStage(object[0])
         self.platform = ShaderPlatform(object[1])
+        self.inputs = [copy.deepcopy(input_definitions[i]) for i in object[2]]
         return self
 
     def load(self, object: dict, path: str):

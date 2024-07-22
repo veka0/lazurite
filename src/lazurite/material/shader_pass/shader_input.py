@@ -167,3 +167,30 @@ class ShaderInput:
         self.precision = Precision[object["precision"] or "none"]
         self.interpolation = Interpolation[object["interpolation"] or "none"]
         return self
+
+    def serialize_minimal(self):
+        return [
+            self.name,
+            self.type.value,
+            self.semantic.index,
+            self.semantic.sub_index,
+            int(self.per_instance),
+            self.precision.value if self.precision is not Precision.none else -1,
+            (
+                self.interpolation.value
+                if self.interpolation is not Interpolation.none
+                else -1
+            ),
+        ]
+
+    def load_minimal(self, obj: dict):
+        self.name = obj[0]
+        self.type = InputType(obj[1])
+        self.semantic.index = obj[2]
+        self.semantic.sub_index = obj[3]
+        self.per_instance = bool(obj[4])
+        self.precision = Precision(obj[5]) if obj[5] != -1 else Precision.none
+        self.interpolation = (
+            Interpolation(obj[6]) if obj[6] != -1 else Interpolation.none
+        )
+        return self
