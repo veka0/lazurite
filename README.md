@@ -25,12 +25,6 @@ or
 python -m pip install lazurite
 ```
 
-You can also install lazurite with optional GLSL validation capability, with
-
-```sh
-pip install lazurite[opengl]
-```
-
 ## Next steps
 
 Read the documentation here <https://veka0.github.io/lazurite>
