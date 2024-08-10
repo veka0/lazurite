@@ -10,14 +10,13 @@ class ShaderPlatform(Enum):
     Direct3D_XBX = 5
     GLSL_120 = 6
     GLSL_430 = 7
-    ESSL_100 = 8
-    ESSL_300 = 9
-    ESSL_310 = 10
-    Metal = 11
-    Vulkan = 12
-    Nvn = 13
-    PSSL = 14
-    Unknown = 15
+    ESSL_300 = 8
+    ESSL_310 = 9
+    Metal = 10
+    Vulkan = 11
+    Nvn = 12
+    PSSL = 13
+    Unknown = 14
 
     def file_extension(self):
         if self.name.startswith("Direct3D"):
