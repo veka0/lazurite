@@ -152,7 +152,6 @@ material.json
     "Direct3D_XBX": true,
     "GLSL_120": true,
     "GLSL_430": true,
-    "ESSL_100": true,
     "ESSL_300": true,
     "ESSL_310": true,
     "Metal": true,
@@ -174,9 +173,9 @@ material.json
       },
       "shaders": [
         {
-          "file_name": "0.ESSL_100.Fragment.glsl",
+          "file_name": "0.ESSL_300.Fragment.glsl",
           "stage": "Fragment",
-          "platform": "ESSL_100",
+          "platform": "ESSL_300",
           "inputs": [
             {
               "name": "texcoord0",

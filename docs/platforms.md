@@ -10,7 +10,6 @@
 | `Direct3D_XBX`  | Xbox X          |
 | `GLSL_120`      | ?               |
 | `GLSL_430`      | ?               |
-| `ESSL_100`      | Android         |
 | `ESSL_300`      | Android         |
 | `ESSL_310`      | Android         |
 | `Metal`         | iOS             |

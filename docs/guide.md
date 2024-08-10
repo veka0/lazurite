@@ -839,7 +839,7 @@ Now let's fill the project.json file:
       "Direct3D_SM50",
       "Direct3D_SM60",
       "Direct3D_SM65",
-      "ESSL_100",
+      "ESSL_300",
       "ESSL_310"
     ],
     "merge_source": ["../vanilla"]
@@ -854,7 +854,7 @@ Now let's fill the project.json file:
       ]
     },
     "android": {
-      "platforms": ["ESSL_100", "ESSL_310"]
+      "platforms": ["ESSL_300", "ESSL_310"]
     }
   }
 }
