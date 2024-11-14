@@ -36,9 +36,13 @@ vanilla/
 
 ## Obtaining source code
 
-Next step would be to get the source code. This guide will show you how to obtain it by yourself, for any game version.
+Next step would be to get the source code. This guide will show you how to obtain it by yourself.
 
-Lazurite has a [restore](commands.md#restore) command that can partially recover source code from **_Android_** materials.
+!!!warning "Restoring latest Android materials"
+
+    Starting from 1.21.31.05 release and 1.21.20.24 preview, restore command can no longer restore source code from Android materials since it's no longer shipped in material.bin files in a readable form. Instead, you can get it from older game versions by restoring their respective material.bin files or by downloading already restored code from [mcbe codebase repository](https://github.com/veka0/mcbe-shader-codebase)
+
+Lazurite has a [restore](commands.md#restore) command that can partially recover source code from **_Android_** materials\* (only for older versions; see above warning).
 You can use it on RenderChunk.material.bin file that you copied from your Android game installation:
 
 ```sh

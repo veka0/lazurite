@@ -164,6 +164,10 @@ lazurite restore [MATERIALS ...] [--timeout SECONDS] [--max-workers WORKERS] [--
 
     This command won't restore shaders from encrypted materials (RTXStub)
 
+!!!warning "Restoring latest Android materials"
+
+    Starting from 1.21.31.05 release and 1.21.20.24 preview, restore command can no longer restore source code from Android materials since it's no longer shipped in material.bin files in a readable form. Instead, you can get it from older game versions by restoring their respective material.bin files or by downloading already restored code from [mcbe codebase repository](https://github.com/veka0/mcbe-shader-codebase)
+
 Attempts to restore GLSL or BGFX SC source code from ESSL_300 or ESSL_310 materials (mainly used in Android) and varying.def.sc from any materials.
 It works by identifying the differences between individual shader variants and trying to find matching macro conditionals.
 
