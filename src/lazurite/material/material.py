@@ -94,6 +94,16 @@ class Material:
         self._read_parent(file)
         self._read_items(file, Buffer, self.buffers, util.read_ubyte)
         self._read_items(file, Uniform, self.uniforms, util.read_ushort)
+
+        # Note: "Core/Builtins" material is missing this field.
+        # This is likely a bug and will be fixed in future game updates
+        if self.name != "Core/Builtins":
+            # This doesn't seem to do anything yet, but it will
+            # likely be used for custom uniform registry in the future.
+            for _ in range(util.read_ushort(file)):
+                key = util.read_string(file)
+                value = util.read_string(file)
+
         self._read_items(file, Pass, self.passes, util.read_ushort)
         self._validate_magic(file)
 
@@ -143,6 +153,10 @@ class Material:
 
         self._write_items(file, self.buffers, util.write_ubyte)
         self._write_items(file, self.uniforms, util.write_ushort)
+
+        if self.name != "Core/Builtins":
+            util.write_ushort(file, 0)
+
         self._write_items(file, self.passes, util.write_ushort)
 
         util.write_ulonglong(file, self.MAGIC)
