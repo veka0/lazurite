@@ -77,7 +77,7 @@ class Buffer:
     reg2: int
     sampler_state: SamplerState | None
     default_texture: str
-    unknown_string: str
+    texture_path: str
     custom_type_info: CustomTypeInfo | None
 
     def __init__(self):
@@ -92,7 +92,7 @@ class Buffer:
         self.reg2 = 0
         self.sampler_state = None
         self.default_texture = ""
-        self.unknown_string = ""
+        self.texture_path = ""
         self.custom_type_info = None
 
     def read(self, file: BytesIO):
@@ -116,8 +116,7 @@ class Buffer:
             self.default_texture = ""
 
         if util.read_bool(file):
-            self.unknown_string = util.read_string(file)
-            # print(self.unknown_string)  # TODO: remove
+            self.texture_path = util.read_string(file)
 
         if util.read_bool(file):  # CustomTypeInfo
             self.custom_type_info = self.CustomTypeInfo(
@@ -145,9 +144,9 @@ class Buffer:
         if self.default_texture != "":
             util.write_string(file, self.default_texture)
 
-        util.write_bool(file, self.unknown_string != "")
-        if self.unknown_string != "":
-            util.write_string(file, self.unknown_string)
+        util.write_bool(file, self.texture_path != "")
+        if self.texture_path != "":
+            util.write_string(file, self.texture_path)
 
         util.write_bool(file, self.custom_type_info is not None)
         if self.custom_type_info is not None:
@@ -168,7 +167,7 @@ class Buffer:
             "default_texture": self.default_texture,
             "unordered_access": self.unordered_access,
             "always_one": self.always_one,
-            "unknown_string": self.unknown_string,
+            "texture_path": self.texture_path,
             "sampler_state": {},
             "custom_type_info": {},
         }
@@ -200,7 +199,7 @@ class Buffer:
             self.default_texture,
             int(self.unordered_access),
             self.always_one,
-            self.unknown_string,
+            self.texture_path,
             self.sampler_state.get_value() if self.sampler_state else -1,
         ]
         if self.custom_type_info != None:
@@ -220,7 +219,7 @@ class Buffer:
         self.default_texture = object[7]
         self.unordered_access = bool(object[8])
         self.always_one = object[9]
-        self.unknown_string = object[10]
+        self.texture_path = object[10]
         self.sampler_state = SamplerState(object[11]) if object[11] != -1 else None
 
         if len(object) > 12:
@@ -236,7 +235,7 @@ class Buffer:
         self.type = BufferType[object.get("type", self.type.name)]
         self.texture_format = object.get("texture_format", self.texture_format)
         self.always_one = object.get("always_one", self.always_one)
-        self.unknown_string = object.get("unknown_string", self.unknown_string)
+        self.texture_path = object.get("texture_path", self.texture_path)
         self.reg2 = object.get("reg2", self.reg2)
         self.default_texture = object.get("default_texture", self.default_texture)
 
