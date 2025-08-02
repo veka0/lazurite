@@ -31,6 +31,7 @@ class Material:
     parent: str
     buffers: list[Buffer]
     uniforms: list[Uniform]
+    uniform_overrides: dict[str, str]
     passes: list[Pass]
 
     _encryption_key: bytes
@@ -43,6 +44,7 @@ class Material:
         self.parent = ""
         self.buffers = []
         self.uniforms = []
+        self.uniform_overrides = {}
         self.passes = []
 
         self._encryption_key = b""
@@ -94,16 +96,10 @@ class Material:
         self._read_parent(file)
         self._read_items(file, Buffer, self.buffers, util.read_ubyte)
         self._read_items(file, Uniform, self.uniforms, util.read_ushort)
-
-        # Note: "Core/Builtins" material is missing this field.
-        # This is likely a bug and will be fixed in future game updates
         if self.name != "Core/Builtins":
-            # This doesn't seem to do anything yet, but it will
-            # likely be used for custom uniform registry in the future.
-            for _ in range(util.read_ushort(file)):
-                key = util.read_string(file)
-                value = util.read_string(file)
-
+            # Note: "Core/Builtins" material is missing this field.
+            # This is likely a bug and will be fixed in future game updates
+            self._read_uniform_overrides(file)
         self._read_items(file, Pass, self.passes, util.read_ushort)
         self._validate_magic(file)
 
@@ -113,6 +109,13 @@ class Material:
     def _read_items(self, file: BytesIO, item_type, item_list, read_count):
         count = read_count(file)
         item_list[:] = [item_type().read(file) for _ in range(count)]
+
+    def _read_uniform_overrides(self, file: BytesIO):
+        for _ in range(util.read_ushort(file)):
+            uniform_name = util.read_string(file)
+            override_id = util.read_string(file)
+
+            self.uniform_overrides[uniform_name] = override_id
 
     def write(self, file: BytesIO):
         """
@@ -155,7 +158,7 @@ class Material:
         self._write_items(file, self.uniforms, util.write_ushort)
 
         if self.name != "Core/Builtins":
-            util.write_ushort(file, 0)
+            self._write_uniform_overrides(file)
 
         self._write_items(file, self.passes, util.write_ushort)
 
@@ -165,6 +168,12 @@ class Material:
         write_count(file, len(item_list))
         for item in item_list:
             item.write(file)
+
+    def _write_uniform_overrides(self, file: BytesIO):
+        util.write_ushort(file, len(self.uniform_overrides))
+        for uniform_name, override_id in self.uniform_overrides.items():
+            util.write_string(file, uniform_name)
+            util.write_string(file, override_id)
 
     def _get_truncated_nonce(self):
         return self._encryption_nonce[:12]
@@ -179,6 +188,7 @@ class Material:
             "parent": self.parent,
             "buffers": [buffer.name for buffer in self.buffers],
             "uniforms": [uniform.name for uniform in self.uniforms],
+            "uniform_overrides": self.uniform_overrides,
             "passes": [render_pass.name for render_pass in self.passes],
         }
 
@@ -239,6 +249,7 @@ class Material:
             [i.serialize_minimal() for i in input_defs],
             [buffer.serialize_minimal() for buffer in self.buffers],
             [uniform.serialize_minimal() for uniform in self.uniforms],
+            self.uniform_overrides,
             [
                 render_pass.serialize_minimal(flag_defs, input_defs)
                 for render_pass in self.passes
@@ -258,7 +269,8 @@ class Material:
 
         self.buffers = [Buffer().load_minimal(i) for i in obj[5]]
         self.uniforms = [Uniform().load_minimal(i) for i in obj[6]]
-        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[7]]
+        self.uniform_overrides = obj[7]
+        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[8]]
 
     def store_minimal(self, name: str, path: str = "."):
         """
@@ -318,6 +330,9 @@ class Material:
         self._load_folder(material_json, material_path, "buffers", self.buffers, Buffer)
         self._load_folder(
             material_json, material_path, "uniforms", self.uniforms, Uniform
+        )
+        self.uniform_overrides = material_json.get(
+            "uniform_overrides", self.uniform_overrides
         )
         self._load_folder(material_json, material_path, "passes", self.passes, Pass)
 
