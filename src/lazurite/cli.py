@@ -272,6 +272,7 @@ def info(args):
                     "Reg1": b.reg1,
                     "Reg2": b.reg2,
                     "Unordered Access": b.unordered_access,
+                    "Texture Path": b.texture_path,
                     "Sampler State": (
                         {
                             "Texture Filter": b.sampler_state.filter.name,
@@ -295,6 +296,12 @@ def info(args):
                 f"{u.type.name} {u.name}{'['+str(u.count)+']' if u.count > 1 else ''}{(' = [' + ', '.join(str(d) for d in u.default)+']') if u.default else ''}"
                 for u in material.uniforms
             ],
+            "Uniform Overrides": sorted(
+                [
+                    f"{key}: {value}"
+                    for key, value in material.uniform_overrides.items()
+                ],
+            ),
         }
         print(f"#### {file_name} ####")
         print(_format_info(info))
