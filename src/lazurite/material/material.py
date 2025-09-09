@@ -1,8 +1,10 @@
-import pyjson5, json, os
+import pyjson5
+import json
+import os
 from Crypto.Cipher import AES
 from io import BytesIO
 
-from lazurite.decompiler.macro_decompiler import Variant, restore_code
+from lazurite.decompiler.macro_decompiler import InputVariant, restore_code
 from lazurite.decompiler.varying_decompiler import (
     restore_varying,
     generate_varying_line,
@@ -405,7 +407,7 @@ class Material:
         """
         Attempts to restore varying.def.sc file. Works for any platforms.
         """
-        permutations: list[Variant] = []
+        permutations: list[InputVariant] = []
         for p in self.passes:
             per_pass_inputs: dict[
                 ShaderPlatform, dict[ShaderStage, list[ShaderInput]]
@@ -451,7 +453,7 @@ class Material:
                     continue
                 text = "\n\n".join(blocks)
                 flags = {"pass": p.name, f"f_platform": platform.name}
-                permutations.append(Variant(flags, text))
+                permutations.append(InputVariant(flags, text))
         if not permutations:
             return ""
 
@@ -501,7 +503,7 @@ class Material:
             flag_definition[name] = values
 
         for platform in platforms:
-            shader_definitions: dict[str, dict[ShaderStage, list[Variant]]] = {}
+            shader_definitions: dict[str, dict[ShaderStage, list[InputVariant]]] = {}
             for shader_pass in self.passes:
                 for variant in shader_pass.variants:
                     for shader in variant.shaders:
@@ -526,7 +528,7 @@ class Material:
                             flags["f_" + key] = value
 
                         code = shader.bgfx_shader.shader_bytes.decode()
-                        code_list.append(Variant(flags, code))
+                        code_list.append(InputVariant(flags, code))
             if not shader_definitions:
                 continue
 
@@ -538,7 +540,7 @@ class Material:
                     stage_dict.clear()
                     stage_dict[ShaderStage.Fragment] = merged_list
             if not split_passes:
-                merged_dict: dict[ShaderStage, list[Variant]] = {}
+                merged_dict: dict[ShaderStage, list[InputVariant]] = {}
                 for _, stage_dict in shader_definitions.items():
                     for stage, code_list in stage_dict.items():
                         if stage not in merged_dict:

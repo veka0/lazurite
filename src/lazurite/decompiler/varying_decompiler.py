@@ -1,7 +1,6 @@
 import re
 
-
-from .macro_decompiler import restore_code, Variant
+from .macro_decompiler import restore_code, InputVariant
 from lazurite import util
 from lazurite.material.stage import ShaderStage
 from lazurite.material.platform import ShaderPlatform
@@ -89,7 +88,7 @@ def _postprocess_varying(code: str):
     return code
 
 
-def restore_varying(permutations: list[Variant], search_timeout: float = 10):
+def restore_varying(permutations: list[InputVariant], search_timeout: float = 10):
     _, code = restore_code(permutations, False, search_timeout=search_timeout)
 
     return _postprocess_varying(code)
