@@ -39,8 +39,12 @@ material.json
     "RenderChunkFogAlpha",
     "LightWorldSpaceDirection",
     "MaterialID",
-    "ViewPositionAndTime"
+    "ViewPositionAndTime",
+    "MyAwesomeUniform"
   ],
+  "uniform_overrides": {
+    "MyAwesomeUniform": "BUILTIN_MinecraftCameraPosition"
+  },
   "passes": [
     "DepthOnlyOpaque",
     "AlphaTest",
@@ -51,14 +55,55 @@ material.json
 }
 ```
 
-| Property   | Description             | Allowed values or types |
-| ---------- | ----------------------- | ----------------------- |
-| `version`  | Material format version | `22`                    |
-| `name`     | Material name           | string                  |
-| `parent`   | Parent material name    | string                  |
-| `buffers`  | List of buffer names    | list of strings         |
-| `uniforms` | List of uniform names   | list of strings         |
-| `passes`   | List of pass names      | list of strings         |
+| Property                                             | Description               | Allowed values or types |
+| ---------------------------------------------------- | ------------------------- | ----------------------- |
+| `version`                                            | Material format version   | `22`                    |
+| `name`                                               | Material name             | string                  |
+| `parent`                                             | Parent material name      | string                  |
+| `buffers`                                            | List of buffer names      | list of strings         |
+| `uniforms`                                           | List of uniform names     | list of strings         |
+| [`uniform_overrides`](material.md#uniform_overrides) | List of uniform overrides | dictionary of strings   |
+| `passes`                                             | List of pass names        | list of strings         |
+
+### uniform_overrides
+
+This field enables overriding behavior of existing uniforms in the material.
+Specifying override ID per uniform changes the behavior of that uniform.
+
+For example, if you want uniform `MyAwesomeUniform` to return camera position, and `FogColor` to return cloud color, it can be achieved in the following way:
+
+```json
+"uniform_overrides": {
+  "MyAwesomeUniform": "BUILTIN_MinecraftCameraPosition",
+  "FogColor": "BUILTIN_MinecraftFogColor"
+}
+```
+
+Below is a list of built-in (vanilla) uniform override IDs.
+
+| Override ID                                | Notes                                                                                                                                                             |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BUILTIN_MinecraftBiomeID                   | Biome ID (integer). List of biome IDs is available [here](https://github.com/Mojang/bedrock-samples/blob/preview/metadata/vanilladata_modules/mojang-biomes.json) |
+| BUILTIN_MinecraftCloudHeight               | Y coordinate of where the clouds layer begins                                                                                                                     |
+| BUILTIN_MinecraftDay                       | Current day count                                                                                                                                                 |
+| BUILTIN_MinecraftDimensionID               | 0 - overworld, 1 - nether, 2 - end                                                                                                                                |
+| BUILTIN_MinecraftLocalClientID             | Unknown, probably some kind of unique integer ID per player that can be accessed from scripting API                                                               |
+| BUILTIN_MinecraftMoonIntensity             | Moon intensity from vibrant visuals (1 if VV is disabled)                                                                                                         |
+| BUILTIN_MinecraftMoonPhase                 | FULL_MOON=0, WANING_GIBBOUS=1, FIRST_QUARTER=2, WANING_CRESCENT=3, NEW_MOON=4, WAXING_CRESCENT=5, LAST_QUARTER=6, WAXING_GIBBOUS=7                                |
+| BUILTIN_MinecraftRenderDistance            | Render distance (in blocks)                                                                                                                                       |
+| BUILTIN_MinecraftSunIntensity              | Sun intensity from vibrant visuals (1 if VV is disabled)                                                                                                          |
+| BUILTIN_MinecraftTimeOfDay                 | 0 - noon, 0.25 - sunset, 0.5 - midnight, 0.75 - sunrise                                                                                                           |
+| BUILTIN_MinecraftElapsedFrameTime          | Frame time (1/fps)                                                                                                                                                |
+| BUILTIN_MinecraftWeatherID                 | 0 - clear, 1 - rain, 2 - snow                                                                                                                                     |
+| BUILTIN_MinecraftCameraFacingDirection     |                                                                                                                                                                   |
+| BUILTIN_MinecraftCameraPosition            |                                                                                                                                                                   |
+| BUILTIN_MinecraftLastCameraFacingDirection | Camera direction from last frame                                                                                                                                  |
+| BUILTIN_MinecraftLastCameraPosition        | Camera position from last frame                                                                                                                                   |
+| BUILTIN_MinecraftSunDirection              |                                                                                                                                                                   |
+| BUILTIN_MinecraftCloudColor                |                                                                                                                                                                   |
+| BUILTIN_MinecraftFogColor                  |                                                                                                                                                                   |
+| BUILTIN_MinecraftMoonColor                 | Moon color from vibrant visuals (1 if VV is disabled)                                                                                                             |
+| BUILTIN_MinecraftSunColor                  | Sun color from vibrant visuals (1 if VV is disabled)                                                                                                              |
 
 ## Buffer Schema
 
