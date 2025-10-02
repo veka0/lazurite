@@ -75,7 +75,7 @@ For example, if you want uniform `MyAwesomeUniform` to return camera position, a
 ```json
 "uniform_overrides": {
   "MyAwesomeUniform": "BUILTIN_MinecraftCameraPosition",
-  "FogColor": "BUILTIN_MinecraftFogColor"
+  "FogColor": "BUILTIN_MinecraftCloudColor"
 }
 ```
 
