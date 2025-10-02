@@ -260,12 +260,12 @@ save the compiled materials in the `output/` folder
 
 !!!info "Download DXC and SHADERC compilers"
 
-    Shaderc is a cross platform compiler commonly used for compiling regular, non-rtx shaders.
+    Shaderc is a cross-platform BGFX shader compiler, commonly used for compiling regular, non-rtx shaders.
 
-    Download: <https://github.com/ddf8196/bgfx-mcbe/actions>
-
-    Alternative download:
+    Recommended download:
     <https://github.com/veka0/bgfx-mcbe/releases/tag/binaries>
+
+    Original download source (binaries are no longer available) <https://github.com/ddf8196/bgfx-mcbe/actions>
 
     DXC compiler is mainly used for compiling RTX shaders, as it only supports Direct3D.
 
@@ -381,6 +381,7 @@ Buffers:
     - Reg1: 0
     - Reg2: 0
     - Unordered Access: False
+    - Texture Path:
     - Sampler State:
       - Texture Filter: Bilinear
       - Texture Wrap: Clamp
@@ -389,14 +390,23 @@ Buffers:
     - Reg1: 1
     - Reg2: 1
     - Unordered Access: True
+    - Texture Path:
     - Sampler State:
     - Custom Type Info:
       - Struct: LightSourceWorldInfo
       - Size: 448
+  - lowp texture2D HDRI:
+    - Reg1: 2
+    - Reg2: 2
+    - Unordered Access: False
+    - Texture Path: textures/hdri
+    - Sampler State:
+    - Custom Type Info:
   - lowp texture2D MaxFrameLuminance r32f:
     - Reg1: 3
     - Reg2: 3
     - Unordered Access: True
+    - Texture Path:
     - Sampler State:
     - Custom Type Info:
 Uniforms (6):
@@ -406,6 +416,9 @@ Uniforms (6):
   - vec4 BannerUVOffsetsAndScales[7]
   - vec4 BlockBaseAmbientLightColorIntensity
   - mat4 Bones[8]
+  - vec4 MyAwesomeUniform
+Uniform Overrides (1):
+  - MyAwesomeUniform: BUILTIN_MinecraftCameraPosition
 ```
 
 ## serialize
