@@ -25,7 +25,7 @@ class Material:
     EXTENSION = ".material.bin"
     JSON_EXTENSION = ".material.json"
     COMPILED_MATERIAL_DEFINITION = "RenderDragon.CompiledMaterialDefinition"
-    VERSION = 22
+    VERSION = 23
 
     version: int
     name: str

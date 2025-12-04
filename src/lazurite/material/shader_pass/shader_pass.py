@@ -42,6 +42,8 @@ class Pass:
             key = util.read_string(file)
             self.default_variant[key] = util.read_string(file)
 
+        util.read_ulong(file)
+
         self.variants = [Variant().read(file) for _ in range(util.read_ushort(file))]
 
         return self
@@ -59,6 +61,8 @@ class Pass:
         for key in self.default_variant:
             util.write_string(file, key)
             util.write_string(file, self.default_variant[key])
+
+        util.write_ulong(file, 0)
 
         util.write_ushort(file, len(self.variants))
         for variant in self.variants:
