@@ -258,7 +258,7 @@ class Material:
             [uniform.serialize_minimal() for uniform in self.uniforms],
             self.uniform_overrides,
             [
-                render_pass.serialize_minimal(flag_defs, input_defs)
+                render_pass.serialize_minimal(flag_defs, input_defs, self.version)
                 for render_pass in self.passes
             ],
         ]
@@ -282,7 +282,9 @@ class Material:
         self.buffers = [Buffer().load_minimal(i) for i in obj[6]]
         self.uniforms = [Uniform().load_minimal(i) for i in obj[7]]
         self.uniform_overrides = obj[8]
-        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[9]]
+        self.passes = [
+            Pass().load_minimal(i, flag_defs, input_defs, self.version) for i in obj[9]
+        ]
 
     def store_minimal(self, name: str, path: str = "."):
         """

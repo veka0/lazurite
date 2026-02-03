@@ -103,10 +103,11 @@ class Pass:
         self,
         flag_definitions: dict[str, list[str]],
         input_definitions: list[ShaderInput],
+        version: int,
     ):
         obj = [
             self.name,
-            self.supported_platforms.get_bit_string(),
+            self.supported_platforms.get_bit_string(version),
             self.fallback_pass,
             (
                 self.default_blend_mode.value
@@ -134,9 +135,12 @@ class Pass:
         object: dict,
         flag_definitions: dict[str, list[str]],
         input_definitions: list[ShaderInput],
+        version: int,
     ):
         self.name = object[0]
-        self.supported_platforms = SupportedPlatforms(object[1])
+        self.supported_platforms = SupportedPlatforms().parse_bit_string(
+            object[1], version
+        )
         self.fallback_pass = object[2]
         mode = object[3]
         self.default_blend_mode = BlendMode(mode) if mode else BlendMode.Unspecified
