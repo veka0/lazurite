@@ -55,15 +55,15 @@ material.json
 }
 ```
 
-| Property                                             | Description               | Allowed values or types |
-| ---------------------------------------------------- | ------------------------- | ----------------------- |
-| `version`                                            | Material format version   | `22`                    |
-| `name`                                               | Material name             | string                  |
-| `parent`                                             | Parent material name      | string                  |
-| `buffers`                                            | List of buffer names      | list of strings         |
-| `uniforms`                                           | List of uniform names     | list of strings         |
-| [`uniform_overrides`](material.md#uniform_overrides) | List of uniform overrides | dictionary of strings   |
-| `passes`                                             | List of pass names        | list of strings         |
+| Property                                             | Description               | Allowed values or types                                  |
+| ---------------------------------------------------- | ------------------------- | -------------------------------------------------------- |
+| `version`                                            | Material format version   | integer, see [supported versions](supported_versions.md) |
+| `name`                                               | Material name             | string                                                   |
+| `parent`                                             | Parent material name      | string                                                   |
+| `buffers`                                            | List of buffer names      | list of strings                                          |
+| `uniforms`                                           | List of uniform names     | list of strings                                          |
+| [`uniform_overrides`](material.md#uniform_overrides) | List of uniform overrides | dictionary of strings                                    |
+| `passes`                                             | List of pass names        | list of strings                                          |
 
 ### uniform_overrides
 
@@ -210,6 +210,7 @@ Below is a list of built-in (vanilla) uniform override IDs.
   "default_variant": {
     "AlphaTest": "On"
   },
+  "framebuffer_binding": 0,
   "variants": [
     {
       "is_supported": true,
@@ -254,14 +255,15 @@ Below is a list of built-in (vanilla) uniform override IDs.
 }
 ```
 
-| Property              | Description                      | Allowed values or types                                                                                                                                                               | Details                                                                                                                        |
-| --------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `name`                | Shader pass name                 | string                                                                                                                                                                                |                                                                                                                                |
-| `supported_platforms` | Platforms that support this pass | dictionary with [platforms](platforms.md) as keys and bool as values                                                                                                                  | Unsupported platforms will not render this pass and instead use fallback_pass (if defined)                                     |
-| `fallback_pass`       | Name of the fallback pass        | string                                                                                                                                                                                | This pass will be used if current pass is unsupported                                                                          |
-| `default_blend_mode`  | Unknown                          | (empty string) `NoneMode` `Replace` `AlphaBlend` `ColorBlendAlphaAdd` `PreMultiplied` `InvertColor` `Additive` `AdditiveAlpha` `Multiply` `MultiplyBoth` `InverseSrcAlpha` `SrcAlpha` | Empty string indicates that shader pass doesn't have this property                                                             |
-| `default_variant`     | Default variant flags            | Dictionary of strings                                                                                                                                                                 | Variant with specified flags will be used as default, if the game fails to find a variant with requested flags in the material |
-| `variants`            | List of variants                 | See [variant schema](material.md#variant) for details                                                                                                                                 |                                                                                                                                |
+| Property              | Description                        | Allowed values or types                                                                                                                                                               | Details                                                                                                                        |
+| --------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `name`                | Shader pass name                   | string                                                                                                                                                                                |                                                                                                                                |
+| `supported_platforms` | Platforms that support this pass   | dictionary with [platforms](platforms.md) as keys and bool as values                                                                                                                  | Unsupported platforms will not render this pass and instead use fallback_pass (if defined)                                     |
+| `fallback_pass`       | Name of the fallback pass          | string                                                                                                                                                                                | This pass will be used if current pass is unsupported                                                                          |
+| `default_blend_mode`  | Unknown                            | (empty string) `NoneMode` `Replace` `AlphaBlend` `ColorBlendAlphaAdd` `PreMultiplied` `InvertColor` `Additive` `AdditiveAlpha` `Multiply` `MultiplyBoth` `InverseSrcAlpha` `SrcAlpha` | Empty string indicates that shader pass doesn't have this property                                                             |
+| `default_variant`     | Default variant flags              | Dictionary of strings                                                                                                                                                                 | Variant with specified flags will be used as default, if the game fails to find a variant with requested flags in the material |
+| `framebuffer_binding` | Unique framebuffer cnfiguration ID | integer                                                                                                                                                                               | Exact behavior or meaning is unknown, but at this time it is not a useful property to modify for shader developers.            |
+| `variants`            | List of variants                   | See [variant schema](material.md#variant) for details                                                                                                                                 |                                                                                                                                |
 
 ### variant
 

@@ -1,6 +1,6 @@
 # Commands
 
-Main way of interacting with lazurite is with a command line interface, which can have different syntax, depending on the installation method
+The main way of interacting with lazurite is a command line interface, which can have different syntax, depending on the installation method
 
 ```sh
 lazurite COMMAND [INPUTS ...] [ARGUMENTS ...]
@@ -22,6 +22,7 @@ Here is a cheatsheet of what each command does
 | [**pack**](commands.md#pack)           | Packs materials back into `material.bin` files                                                               |
 | [**label**](commands.md#label)         | Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)                              |
 | [**clear**](commands.md#clear)         | Clears compiled shaders in materials, while removing encryption                                              |
+| [**convert**](commands.md#convert)     | Converts between `.material.bin` file [format versions](supported_versions.md)                               |
 | [**restore**](commands.md#restore)     | Restores GLSL or SC source code from Android materials and varying.def.sc from any materials                 |
 | [**build**](commands.md#build)         | Compiles all materials and shaders in a project                                                              |
 | [**info**](commands.md#info)           | Displays useful information about input material                                                             |
@@ -143,6 +144,28 @@ Example usage
 
 ```sh
 lazurite clear RTXStub.material.bin -o outputFolder/
+```
+
+## convert
+
+```sh
+lazurite convert [MATERIALS ...] [-v VERSION] [-o OUTPUT]
+```
+
+| Argument         | Description                                                                   | Default                  |
+| ---------------- | ----------------------------------------------------------------------------- | ------------------------ |
+| `-v` `--version` | Version number to convert to. See [supported versions](supported_versions.md) | latest available version |
+| `-o` `--output`  | Output folder, where converted material bin files will be stored              | current directory        |
+
+Converts between `.material.bin` file formats. Note that it doesn't account for differences in shader logic and
+converted materials are not guaranteed to be functional. Do not rely on this command to support multiple
+versions if you are a shader developer, it is always better to directly compile different versions of the shader using
+vanilla materials from the appropriate game versions as merge source, rather than converting compiled materials after the fact.
+
+Example usage
+
+```sh
+lazurite convert RenderChunk.material.bin folderWithMaterials/ -v 22 -o outputFolder/
 ```
 
 ## restore
@@ -342,6 +365,7 @@ Example output:
 ```
 #### ActorBannerForwardPBR.material.bin ####
 Name: ActorBannerForwardPBR
+Format Version: 22
 Encryption: NONE
 Parent: ActorForwardPBR
 Total Shaders: 544
