@@ -95,7 +95,7 @@ class Buffer:
         self.texture_path = ""
         self.custom_type_info = None
 
-    def read(self, file: BytesIO):
+    def read(self, file: BytesIO, version: int):
         self.name = util.read_string(file)
         self.reg1 = util.read_ushort(file)
         self.access = BufferAccess(util.read_ubyte(file))  # 1 2 3
@@ -125,7 +125,7 @@ class Buffer:
 
         return self
 
-    def write(self, file: BytesIO):
+    def write(self, file: BytesIO, version: int):
         util.write_string(file, self.name)
         util.write_ushort(file, self.reg1)
         util.write_ubyte(file, self.access.value)
@@ -181,7 +181,7 @@ class Buffer:
 
         return obj
 
-    def store(self, path: str = "."):
+    def store(self, version: int, path: str = "."):
         with open(os.path.join(path, f"{self.name}.json"), "w") as f:
             json.dump(self.serialize_properties(), f, indent=4)
 

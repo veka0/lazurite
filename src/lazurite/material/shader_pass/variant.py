@@ -19,7 +19,7 @@ class Variant:
         self.flags = {}
         self.shaders = []
 
-    def read(self, file: BytesIO):
+    def read(self, file: BytesIO, version: int):
         self.is_supported = util.read_bool(file)
         flag_count = util.read_ushort(file)
         shader_count = util.read_ushort(file)
@@ -29,11 +29,13 @@ class Variant:
             key = util.read_string(file)
             self.flags[key] = util.read_string(file)
 
-        self.shaders = [ShaderDefinition().read(file) for _ in range(shader_count)]
+        self.shaders = [
+            ShaderDefinition().read(file, version) for _ in range(shader_count)
+        ]
 
         return self
 
-    def write(self, file: BytesIO):
+    def write(self, file: BytesIO, version: int):
         util.write_bool(file, self.is_supported)
         util.write_ushort(file, len(self.flags))
         util.write_ushort(file, len(self.shaders))
@@ -43,7 +45,7 @@ class Variant:
             util.write_string(file, self.flags[key])
 
         for shader in self.shaders:
-            shader.write(file)
+            shader.write(file, version)
 
         return self
 

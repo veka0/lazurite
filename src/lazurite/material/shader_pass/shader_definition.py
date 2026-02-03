@@ -22,7 +22,7 @@ class ShaderDefinition:
         self.hash = 0
         self.bgfx_shader = BgfxShader()
 
-    def read(self, file: BytesIO):
+    def read(self, file: BytesIO, version: int):
         self.stage = ShaderStage[util.read_string(file)]
         self.platform = ShaderPlatform[util.read_string(file)]
 
@@ -33,9 +33,9 @@ class ShaderDefinition:
             )
 
         platform_index = util.read_ubyte(file)
-        if self.platform.value != platform_index:
+        if self.platform.get_value(version) != platform_index:
             raise Exception(
-                f'Platform name "{self.platform.name}" and index "{platform_index}" do not match! Index "{self.platform.value}" was expected.'
+                f'Platform name "{self.platform.name}" and index "{platform_index}" do not match! Index "{self.platform.get_value(version)}" was expected.'
             )
 
         self.inputs = [ShaderInput().read(file) for _ in range(util.read_ushort(file))]
@@ -45,11 +45,11 @@ class ShaderDefinition:
 
         return self
 
-    def write(self, file: BytesIO):
+    def write(self, file: BytesIO, version: int):
         util.write_string(file, self.stage.name)
-        util.write_string(file, self.platform.name)
+        util.write_string(file, self.platform.get_name(version))
         util.write_ubyte(file, self.stage.value)
-        util.write_ubyte(file, self.platform.value)
+        util.write_ubyte(file, self.platform.get_value(version))
 
         util.write_ushort(file, len(self.inputs))
         for inp in self.inputs:

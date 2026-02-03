@@ -16,6 +16,7 @@ class Pass:
     fallback_pass: str
     default_blend_mode: BlendMode
     default_variant: dict[str, str]
+    framebuffer_binding: int
     variants: list[Variant]
 
     def __init__(self):
@@ -24,11 +25,14 @@ class Pass:
         self.fallback_pass = ""
         self.default_blend_mode = BlendMode.Unspecified
         self.default_variant = {}
+        self.framebuffer_binding = 0
         self.variants = []
 
-    def read(self, file: BytesIO):
+    def read(self, file: BytesIO, version: int):
         self.name = util.read_string(file)
-        self.supported_platforms = SupportedPlatforms(util.read_string(file))
+        self.supported_platforms = SupportedPlatforms().parse_bit_string(
+            util.read_string(file), version
+        )
         self.fallback_pass = util.read_string(
             file
         )  # (empty string) Fallback DoCheckerboarding DepthOnlyFallback
@@ -42,15 +46,20 @@ class Pass:
             key = util.read_string(file)
             self.default_variant[key] = util.read_string(file)
 
-        util.read_ulong(file)
+        if version >= 23:
+            self.framebuffer_binding = util.read_ulong(
+                file
+            )  # 3853911848 for GBuffer, 0 otherwise
 
-        self.variants = [Variant().read(file) for _ in range(util.read_ushort(file))]
+        self.variants = [
+            Variant().read(file, version) for _ in range(util.read_ushort(file))
+        ]
 
         return self
 
-    def write(self, file: BytesIO):
+    def write(self, file: BytesIO, version: int):
         util.write_string(file, self.name)
-        util.write_string(file, self.supported_platforms.get_bit_string())
+        util.write_string(file, self.supported_platforms.get_bit_string(version))
         util.write_string(file, self.fallback_pass)
 
         util.write_bool(file, self.default_blend_mode != BlendMode.Unspecified)
@@ -62,17 +71,18 @@ class Pass:
             util.write_string(file, key)
             util.write_string(file, self.default_variant[key])
 
-        util.write_ulong(file, 0)
+        if version >= 23:
+            util.write_ulong(file, self.framebuffer_binding)
 
         util.write_ushort(file, len(self.variants))
         for variant in self.variants:
-            variant.write(file)
+            variant.write(file, version)
         return self
 
-    def serialize_properties(self):
+    def serialize_properties(self, version: int):
         obj = {}
         obj["name"] = self.name
-        obj["supported_platforms"] = self.supported_platforms.serialize()
+        obj["supported_platforms"] = self.supported_platforms.serialize(version)
         obj["fallback_pass"] = self.fallback_pass
         obj["default_blend_mode"] = (
             self.default_blend_mode.name
@@ -80,8 +90,10 @@ class Pass:
             else ""
         )
         obj["default_variant"] = self.default_variant
-        obj["variants"] = []
 
+        obj["framebuffer_binding"] = self.framebuffer_binding
+
+        obj["variants"] = []
         for i, variant in enumerate(self.variants):
             obj["variants"].append(variant.serialize_properties(i))
 
@@ -105,6 +117,7 @@ class Pass:
                 list(flag_definitions.keys()).index(x): flag_definitions[x].index(y)
                 for x, y in self.default_variant.items()
             },
+            self.framebuffer_binding,
         ]
 
         variants = []
@@ -134,17 +147,18 @@ class Pass:
             for x, y in object[4].items()
         }
 
+        self.framebuffer_binding = object[5]
         self.variants = [
             Variant().load_minimal(variant, flag_definitions, input_definitions)
-            for variant in object[5]
+            for variant in object[6]
         ]
         return self
 
-    def store(self, path: str = ".", skip_shaders=False):
+    def store(self, version: int, path: str = ".", skip_shaders=False):
         pass_dir = os.path.join(path, self.name)
 
         with open(os.path.join(path, f"{self.name}.json"), "w") as f:
-            json.dump(self.serialize_properties(), f, indent=4)
+            json.dump(self.serialize_properties(version), f, indent=4)
 
         if skip_shaders:
             return self
@@ -174,6 +188,9 @@ class Pass:
                 Variant().load(variant, os.path.join(path, self.name))
                 for variant in object["variants"]
             ]
+        self.framebuffer_binding = object.get(
+            "framebuffer_binding", self.framebuffer_binding
+        )
         return self
 
     def label(self, material_name: str):

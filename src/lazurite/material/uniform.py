@@ -25,7 +25,7 @@ class Uniform:
         self.count = 0
         self.default = []
 
-    def read(self, file: BytesIO):
+    def read(self, file: BytesIO, version: int):
         self.name = util.read_string(file)
         self.type = UniformType(util.read_ushort(file))
 
@@ -54,7 +54,7 @@ class Uniform:
 
         return self
 
-    def write(self, file: BytesIO):
+    def write(self, file: BytesIO, version: int):
         util.write_string(file, self.name)
         util.write_ushort(file, self.type.value)
 
@@ -75,7 +75,7 @@ class Uniform:
         obj["default"] = self.default
         return obj
 
-    def store(self, path: str = "."):
+    def store(self, version: int, path: str = "."):
         with open(os.path.join(path, f"{self.name}.json"), "w") as f:
             json.dump(self.serialize_properties(), f, indent=4)
 

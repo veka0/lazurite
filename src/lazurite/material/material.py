@@ -24,8 +24,10 @@ class Material:
     MAGIC = 168942106
     EXTENSION = ".material.bin"
     JSON_EXTENSION = ".material.json"
+    JSON_FORMAT_VERSION = 1
     COMPILED_MATERIAL_DEFINITION = "RenderDragon.CompiledMaterialDefinition"
-    VERSION = 23
+    INITIAL_VERSION = 22
+    LATEST_VERSION = 25
 
     version: int
     name: str
@@ -40,7 +42,7 @@ class Material:
     _encryption_nonce: bytes
 
     def __init__(self):
-        self.version = self.VERSION
+        self.version = self.LATEST_VERSION
         self.name = ""
         self.encryption = EncryptionType.NONE
         self.parent = ""
@@ -71,8 +73,10 @@ class Material:
             raise Exception("Failed to recognize file as material")
 
     def _validate_version(self):
-        if self.version != self.VERSION:
-            raise Exception(f"Unsupported material version: {self.version}")
+        if not (self.INITIAL_VERSION <= self.version <= self.LATEST_VERSION):
+            raise Exception(
+                f"Unsupported material version: {self.version}, only versions between {self.INITIAL_VERSION} and {self.LATEST_VERSION} are supported"
+            )
 
     def _decrypt_and_read(self, file: BytesIO):
         self.encryption = EncryptionType.read(file)
@@ -110,7 +114,7 @@ class Material:
 
     def _read_items(self, file: BytesIO, item_type, item_list, read_count):
         count = read_count(file)
-        item_list[:] = [item_type().read(file) for _ in range(count)]
+        item_list[:] = [item_type().read(file, self.version) for _ in range(count)]
 
     def _read_uniform_overrides(self, file: BytesIO):
         for _ in range(util.read_ushort(file)):
@@ -169,7 +173,7 @@ class Material:
     def _write_items(self, file: BytesIO, item_list: list, write_count):
         write_count(file, len(item_list))
         for item in item_list:
-            item.write(file)
+            item.write(file, self.version)
 
     def _write_uniform_overrides(self, file: BytesIO):
         util.write_ushort(file, len(self.uniform_overrides))
@@ -220,7 +224,7 @@ class Material:
 
             args = [True] if skip_shaders else []
             for item in item_list:
-                item.store(subfolder_dir, *args)
+                item.store(self.version, subfolder_dir, *args)
 
     def serialize_minimal(self):
         """
@@ -244,6 +248,7 @@ class Material:
         )
 
         json = [
+            self.JSON_FORMAT_VERSION,
             self.version,
             self.name,
             self.parent,
@@ -263,16 +268,21 @@ class Material:
         """
         Loads minimal json.
         """
-        self.version = obj[0]
-        self.name = obj[1]
-        self.parent = obj[2]
-        flag_defs = obj[3]
-        input_defs = [ShaderInput().load_minimal(i) for i in obj[4]]
+        format_version = obj[0]
+        if format_version != self.JSON_FORMAT_VERSION:
+            raise Exception(
+                "Unsupported material.json format version: {format_version}! Re-generate material.json files using current Lazurite version"
+            )
+        self.version = obj[1]
+        self.name = obj[2]
+        self.parent = obj[3]
+        flag_defs = obj[4]
+        input_defs = [ShaderInput().load_minimal(i) for i in obj[5]]
 
-        self.buffers = [Buffer().load_minimal(i) for i in obj[5]]
-        self.uniforms = [Uniform().load_minimal(i) for i in obj[6]]
-        self.uniform_overrides = obj[7]
-        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[8]]
+        self.buffers = [Buffer().load_minimal(i) for i in obj[6]]
+        self.uniforms = [Uniform().load_minimal(i) for i in obj[7]]
+        self.uniform_overrides = obj[8]
+        self.passes = [Pass().load_minimal(i, flag_defs, input_defs) for i in obj[9]]
 
     def store_minimal(self, name: str, path: str = "."):
         """
@@ -323,7 +333,7 @@ class Material:
         if os.path.isfile(material_json_path):
             with open(material_json_path) as f:
                 material_json: dict = pyjson5.load(f)
-        self.version = material_json.get("version", self.VERSION)
+        self.version = material_json.get("version", self.version)
         self._validate_version()
 
         self.name = material_json.get("name", self.name)

@@ -255,6 +255,7 @@ def info(args):
 
         info = {
             "Name": material.name,
+            "Format Version": material.version,
             "Encryption": material.encryption.name,
             "Parent": material.parent,
             "Total Shaders": shader_count,
@@ -322,6 +323,18 @@ def serialize(args):
         material.store_minimal(file_name, args.output)
 
 
+def convert(args):
+    for file in list_packed_materials(args):
+        file_name: str = os.path.basename(file)
+        print(file_name)
+
+        material = Material.load_bin_file(file)
+        material.version = args.version
+
+        with open(os.path.join(args.output, file_name), "wb") as f:
+            material.write(f)
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="lazurite",
@@ -338,6 +351,7 @@ def main():
         "info": info,
         "clear": clear,
         "serialize": serialize,
+        "convert": convert,
         # "project",  # not implemented
         # "config",  # not implemented
     }
@@ -450,6 +464,16 @@ def main():
     )
     group.add_argument(
         "--glslang", type=str, default=None, help="glslang validator command"
+    )
+
+    # Convert arguments
+    group = parser.add_argument_group("convert arguments")
+    group.add_argument(
+        "-v",
+        "--version",
+        type=int,
+        default=Material.LATEST_VERSION,
+        help="Output material format version",
     )
 
     # Execute command.
