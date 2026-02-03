@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 name = "lazurite"
 description = "Unofficial shader development tool for Minecraft: Bedrock Edition with RenderDragon graphics engine"
 keywords = ["shader", "minecraft", "bedrock", "renderdragon"]
-version = "0.7.0"
+version = "0.8.0"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "veka0" }]
