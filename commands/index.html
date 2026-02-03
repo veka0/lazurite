@@ -1,0 +1,1322 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../guide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Commands - Lazurite</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#commands" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Lazurite" class="md-header__button md-logo" aria-label="Lazurite" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.964 15.266-8.687 8.669c-.034.035-.086.052-.121.035L3.29 20.79c-.052-.017-.087-.052-.087-.086L.007 8.856c-.018-.053 0-.087.035-.122L8.728.065c.035-.035.087-.052.121-.035l11.866 3.18c.052.017.087.052.087.086l3.18 11.848c.034.053.016.087-.018.122m-11.64-9.433L.667 8.943c-.017 0-.035.034-.017.052l8.53 8.512c.017.017.052.017.052-.017l3.127-11.64c.017 0-.018-.035-.035-.017"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lazurite
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Commands
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Lazurite" class="md-nav__button md-logo" aria-label="Lazurite" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m23.964 15.266-8.687 8.669c-.034.035-.086.052-.121.035L3.29 20.79c-.052-.017-.087-.052-.087-.086L.007 8.856c-.018-.053 0-.087.035-.122L8.728.065c.035-.035.087-.052.121-.035l11.866 3.18c.052.017.087.052.087.086l3.18 11.848c.034.053.016.087-.018.122m-11.64-9.433L.667 8.943c-.017 0-.035.034-.017.052l8.53 8.512c.017.017.052.017.052-.017l3.127-11.64c.017 0-.018-.035-.035-.017"/></svg>
+
+    </a>
+    Lazurite
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unpack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        label
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        clear
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convert
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        info
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        serialize
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../material/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Material Format
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supported_versions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Versions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unpack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        label
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        clear
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convert
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        info
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        serialize
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h1>
+<p>The main way of interacting with lazurite is a command line interface, which can have different syntax, depending on the installation method</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>lazurite<span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>INPUTS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>ARGUMENTS<span class="w"> </span>...<span class="o">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>lazurite.exe<span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>INPUTS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>ARGUMENTS<span class="w"> </span>...<span class="o">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>lazurite<span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>INPUTS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>ARGUMENTS<span class="w"> </span>...<span class="o">]</span>
+</code></pre></div>
+<p>Here is a cheatsheet of what each command does</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="./#unpack"><strong>unpack</strong></a></td>
+<td>Unpacks input materials</td>
+</tr>
+<tr>
+<td><a href="./#pack"><strong>pack</strong></a></td>
+<td>Packs materials back into <code>material.bin</code> files</td>
+</tr>
+<tr>
+<td><a href="./#label"><strong>label</strong></a></td>
+<td>Adds a comment with debug information to plain text shaders (GLSL, ESSL, Metal)</td>
+</tr>
+<tr>
+<td><a href="./#clear"><strong>clear</strong></a></td>
+<td>Clears compiled shaders in materials, while removing encryption</td>
+</tr>
+<tr>
+<td><a href="./#convert"><strong>convert</strong></a></td>
+<td>Converts between <code>.material.bin</code> file <a href="../supported_versions/">format versions</a></td>
+</tr>
+<tr>
+<td><a href="./#restore"><strong>restore</strong></a></td>
+<td>Restores GLSL or SC source code from Android materials and varying.def.sc from any materials</td>
+</tr>
+<tr>
+<td><a href="./#build"><strong>build</strong></a></td>
+<td>Compiles all materials and shaders in a project</td>
+</tr>
+<tr>
+<td><a href="./#info"><strong>info</strong></a></td>
+<td>Displays useful information about input material</td>
+</tr>
+<tr>
+<td><a href="./#serialize"><strong>serialize</strong></a></td>
+<td>Generates minimal json from material bin files that can be used as <a href="../project/#profile-schema">merge source</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="unpack">unpack<a class="headerlink" href="#unpack" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>lazurite<span class="w"> </span>unpack<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--sort-flags<span class="o">]</span><span class="w"> </span><span class="o">[</span>--skip-shaders<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sort-flags</code></td>
+<td>Sorts variants and flags alphabeticaly</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--skip-shaders</code></td>
+<td>Don't unpack compiled shaders</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where materials will be unpacked</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This command won't unpack compiled shaders from encrypted materials (RTXStub)</p>
+</div>
+<p>This command unpacks input materials (<code>material.bin</code> files). You can specify multiple materials or folders with material files.
+By default, it will unpack into current working directory, but optional <code>--output</code>
+argument can be used to specify output directory instead. <code>--sort-flags</code> can be used to sort flags within variants and variants
+by flags, which might be useful when diffing unpacked materials. See <a href="../material/">material format</a> for details on the unpacked
+material format.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>lazurite<span class="w"> </span>unpack<span class="w"> </span>Actor.bin<span class="w"> </span>folderWithMaterials/<span class="w"> </span>RenderChunk.bin<span class="w"> </span>--sort-flags<span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<p>This command will unpack <code>Actor.bin</code>, <code>RenderChunk.bin</code> and all materials in <code>folderWithMaterials/</code> into the <code>outputFolder/</code> while sorting their variants and flags.</p>
+<h2 id="pack">pack<a class="headerlink" href="#pack" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lazurite<span class="w"> </span>pack<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where packed materials will be stored</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<p>This command packs unpacked input materials back into <code>material.bin</code> files. You can specify as an input:</p>
+<ol>
+<li>Path to <code>material.json</code> file inside of unpacked material folder</li>
+<li>Path to unpacked material folder (if it has <code>material.json</code> inside)</li>
+<li>Path to a folder with unpacked materials (if it doesn't have <code>material.json</code> but each material inside of it does)</li>
+</ol>
+<p>Multiple inputs can be specified at the same time. By default, materials will be packed into current working directory, but <code>--output</code> can be used
+to specify a different output directory.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>lazurite<span class="w"> </span>pack<span class="w"> </span>Actor/<span class="w"> </span>folderWithMaterials/<span class="w"> </span>RenderChunk/material.json<span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<p>This command will pack <code>Actor</code> and <code>RenderChunk</code> materials as well as all materials from <code>folderWithMaterials/</code> into the <code>outputFolder/</code>.</p>
+<h2 id="label">label<a class="headerlink" href="#label" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>lazurite<span class="w"> </span>label<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where labeled material bin files will be stored</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<p>Adds a comment with debug information at the top of shader programs. It's added to
+every plain text shader (ESSL, GLSL, Metal) inside of <code>material.bin</code> file. Here is an example of what it looks like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Shader Information:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1">// - Name: RenderChunk</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1">// - Pass: Transparent</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">// - Platform: ESSL_310</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1">// - Stage: Fragment</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1">// - Variant: 0</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1">// - Variant Supported: True</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1">// - Variant Flags:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="c1">//    - Instancing: On</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1">//    - RenderAsBillboards: On</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1">//    - Seasons: Off</span>
+</code></pre></div>
+<p>This information can be useful when using graphics debugger such as RenderDoc.
+As an input, you can specify multiple <code>material.bin</code> files or folders with them.
+<code>--output</code> can be used to specify output folder where labeled <code>material.bin</code> files will be stored
+(by default, it's the current working directory).</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>lazurite<span class="w"> </span>label<span class="w"> </span>RenderChunk.material.bin<span class="w"> </span>folderWithMaterials/<span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<p>This command will label <code>RenderChunk.material.bin</code> and all materials from <code>folderWithMaterials/</code> and save them
+as <code>material.bin</code> files in the <code>outputFolder/</code>.</p>
+<h2 id="clear">clear<a class="headerlink" href="#clear" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>lazurite<span class="w"> </span>clear<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where cleared material bin files will be stored</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<p>Wipes all compiled shaders, while removing encryption. This command can be useful when you need a light-weight
+merge source or when you want to compile RTX shader that shouldn't be encrypted.
+Note that if you unpack resulting material, its compiled shader files will be empty.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>lazurite<span class="w"> </span>clear<span class="w"> </span>RTXStub.material.bin<span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<h2 id="convert">convert<a class="headerlink" href="#convert" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>lazurite<span class="w"> </span>convert<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="w"> </span>VERSION<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-v</code> <code>--version</code></td>
+<td>Version number to convert to. See <a href="../supported_versions/">supported versions</a></td>
+<td>latest available version</td>
+</tr>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where converted material bin files will be stored</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<p>Converts between <code>.material.bin</code> file formats. Note that it doesn't account for differences in shader logic and
+converted materials are not guaranteed to be functional. Do not rely on this command to support multiple
+versions if you are a shader developer, it is always better to directly compile different versions of the shader using
+vanilla materials from the appropriate game versions as merge source, rather than converting compiled materials after the fact.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>lazurite<span class="w"> </span>convert<span class="w"> </span>RenderChunk.material.bin<span class="w"> </span>folderWithMaterials/<span class="w"> </span>-v<span class="w"> </span><span class="m">22</span><span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<h2 id="restore">restore<a class="headerlink" href="#restore" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>lazurite<span class="w"> </span>restore<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--timeout<span class="w"> </span>SECONDS<span class="o">]</span><span class="w"> </span><span class="o">[</span>--max-workers<span class="w"> </span>WORKERS<span class="o">]</span><span class="w"> </span><span class="o">[</span>--no-processing<span class="o">]</span><span class="w"> </span><span class="o">[</span>--merge-stages<span class="o">]</span><span class="w"> </span><span class="o">[</span>--split-passes<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where restored shaders will be stored</td>
+<td>current directory</td>
+</tr>
+<tr>
+<td><code>--max-workers</code></td>
+<td>Maximum number of processes to use</td>
+<td>CPU cores</td>
+</tr>
+<tr>
+<td><code>--timeout</code></td>
+<td>Maximum time allowed for slow search algorithm, in seconds</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>--merge-stages</code></td>
+<td>Generates shader stages in a single file</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--split-passes</code></td>
+<td>Generates separate files for individual passes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--no-processing</code></td>
+<td>Disable additional processing used for converting from GLSL to BGFX SC</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This command won't restore shaders from encrypted materials (RTXStub)</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Restoring latest Android materials</p>
+<p>Starting from 1.21.31.05 release and 1.21.20.24 preview, restore command can no longer restore source code from Android materials since it's no longer shipped in material.bin files in a readable form. Instead, you can get it from older game versions by restoring their respective material.bin files or by downloading already restored code from <a href="https://github.com/veka0/mcbe-shader-codebase">mcbe codebase repository</a></p>
+</div>
+<p>Attempts to restore GLSL or BGFX SC source code from ESSL_300 or ESSL_310 materials (mainly used in Android) and varying.def.sc from any materials.
+It works by identifying the differences between individual shader variants and trying to find matching macro conditionals.</p>
+<p>This command supports multiprocessing (utilizes multiple CPU cores) for faster restoring times and <code>--max-workers</code> argument can be used to specify
+max number of processes that will be created. Each process restores its own material.</p>
+<p>When restoring macro conditionals, lazurite will first try to utilize fast algorithm, and if that fails, it will display <code>slow search</code> message
+in the console and try the slow search algorithm (brute-force), which has a time limit that can be set with <code>--timeout</code>. If slow search fails
+to find the conditional in provided time, it will display a <code>not found</code> message in the console and instead will use the best approximate solution
+it could find, which looks like this in code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">// Approximation, matches 256 cases out of 320</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="cp">#if defined(ALPHA_TEST_PASS) || (defined(OPAQUE_PASS) &amp;&amp; defined(UI_ENTITY__DISABLED))</span>
+</code></pre></div>
+<p>When restoring BGFX SC source code, lazurite will also add <code>// Attention!</code> comment next to code that needs special attention, as it can't be edited automatically.
+It hints at a potential matrix multiplication or matrix element access.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">vec4</span><span class="w"> </span><span class="n">jitterVertexPosition</span><span class="p">(</span><span class="kt">vec3</span><span class="w"> </span><span class="n">worldPosition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">offsetProj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Proj</span><span class="p">;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mo">0</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// Attention!</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="c1">// Attention!</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">offsetProj</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(((</span><span class="n">View</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="kt">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="n">f</span><span class="p">)))));</span><span class="w"> </span><span class="c1">// Attention!</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>Above code would have to be edited manually to look like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">vec4</span><span class="w"> </span><span class="n">jitterVertexPosition</span><span class="p">(</span><span class="kt">vec3</span><span class="w"> </span><span class="n">worldPosition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="kt">mat4</span><span class="w"> </span><span class="n">offsetProj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Proj</span><span class="p">;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="cp">#if BGFX_SHADER_LANGUAGE_GLSL</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mo">0</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="cp">#else</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mo">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="n">offsetProj</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">SubPixelOffset</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="cp">#endif</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mul</span><span class="p">(</span><span class="n">offsetProj</span><span class="p">,</span><span class="w"> </span><span class="n">mul</span><span class="p">(</span><span class="n">View</span><span class="p">,</span><span class="w"> </span><span class="kt">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="n">f</span><span class="p">)));</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>However keep in mind that <code>mul()</code> can't be used for vector component-wise multiplication, and <code>[x][y]</code> syntax might also refer to accessing vector component of an array element
+instead of matrix element, in which case there is no need to change the index order.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>lazurite<span class="w"> </span>restore<span class="w"> </span>RenderChunk.material.bin<span class="w"> </span>folderWithMaterials/
+</code></pre></div>
+<p>This command will restore BGFX SC for <code>RenderChunk.material.bin</code> and for all materials from <code>folderWithMaterials/</code> and save them in the current working directory.</p>
+<h2 id="build">build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>lazurite<span class="w"> </span>build<span class="w"> </span><span class="o">[</span>PROJECTS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--max-workers<span class="w"> </span>WORKERS<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dxc<span class="w"> </span>DXC<span class="o">]</span><span class="w"> </span><span class="o">[</span>--shaderc<span class="w"> </span>SHADERC<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dxc-args<span class="w"> </span><span class="o">[</span>ARGS<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>--shaderc-args<span class="w"> </span><span class="o">[</span>ARGS<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span><span class="o">[</span>PROFILES<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-d<span class="w"> </span><span class="o">[</span>DEFINES<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-m<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-e<span class="w"> </span><span class="o">[</span>EXCLUDE<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where compiled materials will be stored</td>
+<td>project directory</td>
+</tr>
+<tr>
+<td><code>--max-workers</code></td>
+<td>Maximum number of threads (compiler instances) to use</td>
+<td>CPU cores times 5</td>
+</tr>
+<tr>
+<td><code>--dxc</code></td>
+<td>DXC compiler command</td>
+<td>Tries to execute <code>dxc</code> first, then <code>./dxc</code></td>
+</tr>
+<tr>
+<td><code>--dxc-args</code></td>
+<td>DXC arguments</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--shaderc</code></td>
+<td>SHADERC compiler command</td>
+<td>Tries to execute <code>shaderc</code> first, then <code>./shaderc</code></td>
+</tr>
+<tr>
+<td><code>--shaderc-args</code></td>
+<td>SHADERC arguments</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-p</code> <code>--profile</code></td>
+<td>List of profiles (e.g. <code>-p debug, windows, preview</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-d</code> <code>--defines</code></td>
+<td>List of defines (e.g. <code>-d DEBUG, "SAMPLES 10"</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-m</code> <code>--materials</code></td>
+<td>List of glob file path patterns that will be compiled as materials when building a project (overwrites <code>include_patterns</code> and <code>exclude_patterns</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-e</code> <code>--exclude</code></td>
+<td>List of glob file path patterns that will be excluded during project compilation (works with <code>--materials</code>, addtive with <code>exclude_patterns</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--skip-validation</code></td>
+<td>Do not attempt to validate GLSL or ESSL shaders</td>
+<td></td>
+</tr>
+<tr>
+<td><code>--glslang</code></td>
+<td>Glslang validator path</td>
+<td>Tries to execute <code>glslang</code> first, then <code>./glslang</code></td>
+</tr>
+</tbody>
+</table>
+<p>Compiles all materials from input project paths into output directory (or into project folders, if <code>--output</code> is not specified).
+See <a href="../project/">projects documentation</a> for more details.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>lazurite<span class="w"> </span>build<span class="w"> </span>projects/pathTracer/<span class="w"> </span>-p<span class="w"> </span>windows,<span class="w"> </span>android,<span class="w"> </span>preview<span class="w"> </span>-o<span class="w"> </span>output/
+</code></pre></div>
+<p>This command will compile project in <code>projects/pathTracer/</code> folder, with <code>windows</code>, <code>android</code> and <code>preview</code> active profiles and
+save the compiled materials in the <code>output/</code> folder</p>
+<div class="admonition info">
+<p class="admonition-title">Download DXC and SHADERC compilers</p>
+<p>Shaderc is a cross-platform BGFX shader compiler, commonly used for compiling regular, non-rtx shaders.</p>
+<p>Recommended download:
+<a href="https://github.com/veka0/bgfx-mcbe/releases/tag/binaries">https://github.com/veka0/bgfx-mcbe/releases/tag/binaries</a></p>
+<p>Original download source (binaries are no longer available) <a href="https://github.com/ddf8196/bgfx-mcbe/actions">https://github.com/ddf8196/bgfx-mcbe/actions</a></p>
+<p>DXC compiler is mainly used for compiling RTX shaders, as it only supports Direct3D.</p>
+<p>Download: <a href="https://github.com/microsoft/DirectXShaderCompiler/releases">https://github.com/microsoft/DirectXShaderCompiler/releases</a></p>
+</div>
+<details class="warning">
+<summary>Running DXC on Linux</summary>
+<p>When trying to compile materials with DXC compiler on Linux you might encounter the following error:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>./dxc error while loading shared libraries: libdxcompiler.so: cannot open shared object file: No such file or directory
+</code></pre></div>
+<p>It can be solved by prefixing lazurite command with <code>LD_LIBRARY_PATH=&lt;path to folder with libdxcompiler.so&gt;</code></p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>libs<span class="w"> </span>lazurite<span class="w"> </span>build<span class="w"> </span>myAwesomeShader/
+</code></pre></div>
+</details>
+<details class="warning">
+<summary>Running SHADERC on Android (Termux)</summary>
+<p>If you wish to compile on Android, you have to copy shaderc into your termux home directory</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>cp<span class="w"> </span>path/to/shaderc<span class="w"> </span>~/new/path/to/shaderc
+</code></pre></div>
+<p>Make it executable</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/new/path/to/shaderc
+</code></pre></div>
+<p>And reference it in future lazurite build commands</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>lazurite<span class="w"> </span>build<span class="w"> </span>--shaderc<span class="w"> </span>~/new/path/to/shaderc<span class="w"> </span>myAwesomeShader/
+</code></pre></div>
+<hr />
+<p>You might also encounter the following error:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>CANNOT LINK EXECUTABLE &quot;/data/data/com.termux/files/home/shaderc&quot;: library &quot;libc++_shared.so&quot; not found: needed by main executable
+</code></pre></div>
+<p>Which can be solved by copying required file into your home directory</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>cp<span class="w"> </span><span class="nv">$PREFIX</span>/lib/libc++_shared.so<span class="w"> </span>~/
+</code></pre></div>
+<p>And referencing directory with your lib file in the lazurite command, by prefixing it with <code>LD_LIBRARY_PATH=&lt;path to folder with libc++_shared.so&gt;</code></p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>~/<span class="w"> </span>lazurite<span class="w"> </span>build<span class="w"> </span>--shaderc<span class="w"> </span>~/new/path/to/shaderc<span class="w"> </span>myAwesomeShader/
+</code></pre></div>
+</details>
+<h2 id="info">info<a class="headerlink" href="#info" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>lazurite<span class="w"> </span>info<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span>
+</code></pre></div>
+<p>Shows useful information about input material(s).</p>
+<p>Example output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>#### ActorBannerForwardPBR.material.bin ####
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>Name: ActorBannerForwardPBR
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>Format Version: 22
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>Encryption: NONE
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>Parent: ActorForwardPBR
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>Total Shaders: 544
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>Platforms (4):
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>  - Direct3D_SM40
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>  - Direct3D_SM50
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a>  - Direct3D_SM60
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a>  - Direct3D_SM65
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a>Stages (2):
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a>  - Fragment
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a>  - Vertex
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a>Passes:
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a>  - DepthOnly: DEPTH_ONLY_PASS
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a>  - DepthOnlyOpaque: DEPTH_ONLY_OPAQUE_PASS
+<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a>  - ForwardPBRAlphaTest: FORWARD_PBR_ALPHA_TEST_PASS
+<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a>  - ForwardPBROpaque: FORWARD_PBR_OPAQUE_PASS
+<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a>  - ForwardPBRTransparent: FORWARD_PBR_TRANSPARENT_PASS
+<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a>Flags:
+<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a>  - Change_Color:
+<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a>    - Multi: CHANGE_COLOR__MULTI
+<a id="__codelineno-30-24" name="__codelineno-30-24" href="#__codelineno-30-24"></a>    - Off: CHANGE_COLOR__OFF
+<a id="__codelineno-30-25" name="__codelineno-30-25" href="#__codelineno-30-25"></a>  - Emissive:
+<a id="__codelineno-30-26" name="__codelineno-30-26" href="#__codelineno-30-26"></a>    - Off: EMISSIVE__OFF
+<a id="__codelineno-30-27" name="__codelineno-30-27" href="#__codelineno-30-27"></a>  - Fancy:
+<a id="__codelineno-30-28" name="__codelineno-30-28" href="#__codelineno-30-28"></a>    - On: FANCY__ON
+<a id="__codelineno-30-29" name="__codelineno-30-29" href="#__codelineno-30-29"></a>  - Instancing:
+<a id="__codelineno-30-30" name="__codelineno-30-30" href="#__codelineno-30-30"></a>    - Off: INSTANCING__OFF
+<a id="__codelineno-30-31" name="__codelineno-30-31" href="#__codelineno-30-31"></a>    - On: INSTANCING__ON
+<a id="__codelineno-30-32" name="__codelineno-30-32" href="#__codelineno-30-32"></a>  - MaskedMultitexture:
+<a id="__codelineno-30-33" name="__codelineno-30-33" href="#__codelineno-30-33"></a>    - Off: MASKED_MULTITEXTURE__OFF
+<a id="__codelineno-30-34" name="__codelineno-30-34" href="#__codelineno-30-34"></a>    - On: MASKED_MULTITEXTURE__ON
+<a id="__codelineno-30-35" name="__codelineno-30-35" href="#__codelineno-30-35"></a>  - Tinting:
+<a id="__codelineno-30-36" name="__codelineno-30-36" href="#__codelineno-30-36"></a>    - Disabled: TINTING__DISABLED
+<a id="__codelineno-30-37" name="__codelineno-30-37" href="#__codelineno-30-37"></a>    - Enabled: TINTING__ENABLED
+<a id="__codelineno-30-38" name="__codelineno-30-38" href="#__codelineno-30-38"></a>Buffers:
+<a id="__codelineno-30-39" name="__codelineno-30-39" href="#__codelineno-30-39"></a>  - lowp texture2D BrdfLUT:
+<a id="__codelineno-30-40" name="__codelineno-30-40" href="#__codelineno-30-40"></a>    - Reg1: 0
+<a id="__codelineno-30-41" name="__codelineno-30-41" href="#__codelineno-30-41"></a>    - Reg2: 0
+<a id="__codelineno-30-42" name="__codelineno-30-42" href="#__codelineno-30-42"></a>    - Unordered Access: False
+<a id="__codelineno-30-43" name="__codelineno-30-43" href="#__codelineno-30-43"></a>    - Texture Path:
+<a id="__codelineno-30-44" name="__codelineno-30-44" href="#__codelineno-30-44"></a>    - Sampler State:
+<a id="__codelineno-30-45" name="__codelineno-30-45" href="#__codelineno-30-45"></a>      - Texture Filter: Bilinear
+<a id="__codelineno-30-46" name="__codelineno-30-46" href="#__codelineno-30-46"></a>      - Texture Wrap: Clamp
+<a id="__codelineno-30-47" name="__codelineno-30-47" href="#__codelineno-30-47"></a>    - Custom Type Info:
+<a id="__codelineno-30-48" name="__codelineno-30-48" href="#__codelineno-30-48"></a>  - lowp structBuffer DirectionalLightSources:
+<a id="__codelineno-30-49" name="__codelineno-30-49" href="#__codelineno-30-49"></a>    - Reg1: 1
+<a id="__codelineno-30-50" name="__codelineno-30-50" href="#__codelineno-30-50"></a>    - Reg2: 1
+<a id="__codelineno-30-51" name="__codelineno-30-51" href="#__codelineno-30-51"></a>    - Unordered Access: True
+<a id="__codelineno-30-52" name="__codelineno-30-52" href="#__codelineno-30-52"></a>    - Texture Path:
+<a id="__codelineno-30-53" name="__codelineno-30-53" href="#__codelineno-30-53"></a>    - Sampler State:
+<a id="__codelineno-30-54" name="__codelineno-30-54" href="#__codelineno-30-54"></a>    - Custom Type Info:
+<a id="__codelineno-30-55" name="__codelineno-30-55" href="#__codelineno-30-55"></a>      - Struct: LightSourceWorldInfo
+<a id="__codelineno-30-56" name="__codelineno-30-56" href="#__codelineno-30-56"></a>      - Size: 448
+<a id="__codelineno-30-57" name="__codelineno-30-57" href="#__codelineno-30-57"></a>  - lowp texture2D HDRI:
+<a id="__codelineno-30-58" name="__codelineno-30-58" href="#__codelineno-30-58"></a>    - Reg1: 2
+<a id="__codelineno-30-59" name="__codelineno-30-59" href="#__codelineno-30-59"></a>    - Reg2: 2
+<a id="__codelineno-30-60" name="__codelineno-30-60" href="#__codelineno-30-60"></a>    - Unordered Access: False
+<a id="__codelineno-30-61" name="__codelineno-30-61" href="#__codelineno-30-61"></a>    - Texture Path: textures/hdri
+<a id="__codelineno-30-62" name="__codelineno-30-62" href="#__codelineno-30-62"></a>    - Sampler State:
+<a id="__codelineno-30-63" name="__codelineno-30-63" href="#__codelineno-30-63"></a>    - Custom Type Info:
+<a id="__codelineno-30-64" name="__codelineno-30-64" href="#__codelineno-30-64"></a>  - lowp texture2D MaxFrameLuminance r32f:
+<a id="__codelineno-30-65" name="__codelineno-30-65" href="#__codelineno-30-65"></a>    - Reg1: 3
+<a id="__codelineno-30-66" name="__codelineno-30-66" href="#__codelineno-30-66"></a>    - Reg2: 3
+<a id="__codelineno-30-67" name="__codelineno-30-67" href="#__codelineno-30-67"></a>    - Unordered Access: True
+<a id="__codelineno-30-68" name="__codelineno-30-68" href="#__codelineno-30-68"></a>    - Texture Path:
+<a id="__codelineno-30-69" name="__codelineno-30-69" href="#__codelineno-30-69"></a>    - Sampler State:
+<a id="__codelineno-30-70" name="__codelineno-30-70" href="#__codelineno-30-70"></a>    - Custom Type Info:
+<a id="__codelineno-30-71" name="__codelineno-30-71" href="#__codelineno-30-71"></a>Uniforms (6):
+<a id="__codelineno-30-72" name="__codelineno-30-72" href="#__codelineno-30-72"></a>  - vec4 AtmosphericScattering = [0.0, 0.0, 0.0, 0.0]
+<a id="__codelineno-30-73" name="__codelineno-30-73" href="#__codelineno-30-73"></a>  - vec4 AtmosphericScatteringToggles = [0.0, 0.0, 0.0, 0.0]
+<a id="__codelineno-30-74" name="__codelineno-30-74" href="#__codelineno-30-74"></a>  - vec4 BannerColors[7]
+<a id="__codelineno-30-75" name="__codelineno-30-75" href="#__codelineno-30-75"></a>  - vec4 BannerUVOffsetsAndScales[7]
+<a id="__codelineno-30-76" name="__codelineno-30-76" href="#__codelineno-30-76"></a>  - vec4 BlockBaseAmbientLightColorIntensity
+<a id="__codelineno-30-77" name="__codelineno-30-77" href="#__codelineno-30-77"></a>  - mat4 Bones[8]
+<a id="__codelineno-30-78" name="__codelineno-30-78" href="#__codelineno-30-78"></a>  - vec4 MyAwesomeUniform
+<a id="__codelineno-30-79" name="__codelineno-30-79" href="#__codelineno-30-79"></a>Uniform Overrides (1):
+<a id="__codelineno-30-80" name="__codelineno-30-80" href="#__codelineno-30-80"></a>  - MyAwesomeUniform: BUILTIN_MinecraftCameraPosition
+</code></pre></div>
+<h2 id="serialize">serialize<a class="headerlink" href="#serialize" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>lazurite<span class="w"> </span>serialize<span class="w"> </span><span class="o">[</span>MATERIALS<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code> <code>--output</code></td>
+<td>Output folder, where generated <code>.material.json</code> files will be stored</td>
+<td>current directory</td>
+</tr>
+</tbody>
+</table>
+<p>Converts input material bin files into minimal json files, one file per material. Those files
+can be used as a merge source for <a href="./#build">build</a> command, when compiling a project.</p>
+<p>Generated json files only contain information that is necessary for compilation and nothing else, so
+they are quite lightweight. All material properties are sorted alphabetically which makes generated files
+invariant to changes in property sorting that occasionally occur with game updates. Sorting and small size
+makes this file format perfect for storing material merge source in version control systems such as GitHub.</p>
+<p>Example usage</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>lazurite<span class="w"> </span>serialize<span class="w"> </span>RenderChunk.material.bin<span class="w"> </span>folderWithMaterials/<span class="w"> </span>-o<span class="w"> </span>outputFolder/
+</code></pre></div>
+<p>This command will generate json files for <code>RenderChunk.material.bin</code> and all materials from <code>folderWithMaterials/</code>
+and save them in the <code>outputFolder/</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      This website is not affiliated with Mojang Studios, Microsoft or Nvidia
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
