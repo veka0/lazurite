@@ -102,7 +102,7 @@ class Buffer:
         self.precision = Precision(util.read_ubyte(file))  # 0 2
         self.unordered_access = util.read_bool(file)
         self.type = BufferType(util.read_ubyte(file))  # 0 - 9
-        # Values according to bgfx_compute.sh: (empty string) r32ui rg32ui rgba32ui r32f r16f rg16f rgba16f rgba8 rg8 r8 rgba32f
+        # Values according to bgfx_compute.sh: (empty string) r32ui rg32ui rgba32ui r32f r16f rg16f rgba16f rgba8 rg8 r8 rgba32f float int uint
         self.texture_format = util.read_string(file)
         self.always_one = util.read_ulong(file)  # 1
         self.reg2 = util.read_ubyte(file)  # same as reg1
