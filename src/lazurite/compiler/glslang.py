@@ -9,7 +9,7 @@ class Glslang:
 
     def __init__(self, glslang_paths: list[str] | str | None = None) -> None:
         if glslang_paths is None:
-            glslang_paths = ["glslang", "./glslang"]
+            glslang_paths = ["./glslang", "glslang"]
         elif isinstance(glslang_paths, str):
             glslang_paths = [glslang_paths]
 

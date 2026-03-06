@@ -11,7 +11,7 @@ class DxcCompiler:
 
     def __init__(self, dxc_paths: list[str] | str | None = None) -> None:
         if dxc_paths is None:
-            dxc_paths = ["dxc", "./dxc"]
+            dxc_paths = ["./dxc", "dxc"]
         elif isinstance(dxc_paths, str):
             dxc_paths = [dxc_paths]
 
