@@ -258,16 +258,16 @@ lazurite build [PROJECTS ...] [--max-workers WORKERS] [--dxc DXC] [--shaderc SHA
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | `-o` `--output`     | Output folder, where compiled materials will be stored                                                                                            | project directory                                  |
 | `--max-workers`     | Maximum number of threads (compiler instances) to use                                                                                             | CPU cores times 5                                  |
-| `--dxc`             | DXC compiler command                                                                                                                              | Tries to execute `dxc` first, then `./dxc`         |
+| `--dxc`             | DXC compiler command                                                                                                                              | Tries to execute `./dxc` first, then `dxc`         |
 | `--dxc-args`        | DXC arguments                                                                                                                                     |                                                    |
-| `--shaderc`         | SHADERC compiler command                                                                                                                          | Tries to execute `shaderc` first, then `./shaderc` |
+| `--shaderc`         | SHADERC compiler command                                                                                                                          | Tries to execute `./shaderc` first, then `shaderc` |
 | `--shaderc-args`    | SHADERC arguments                                                                                                                                 |                                                    |
 | `-p` `--profile`    | List of profiles (e.g. `-p debug, windows, preview`)                                                                                              |                                                    |
 | `-d` `--defines`    | List of defines (e.g. `-d DEBUG, "SAMPLES 10"`)                                                                                                   |                                                    |
 | `-m` `--materials`  | List of glob file path patterns that will be compiled as materials when building a project (overwrites `include_patterns` and `exclude_patterns`) |                                                    |
 | `-e` `--exclude`    | List of glob file path patterns that will be excluded during project compilation (works with `--materials`, addtive with `exclude_patterns`)      |                                                    |
 | `--skip-validation` | Do not attempt to validate GLSL or ESSL shaders                                                                                                   |                                                    |
-| `--glslang`         | Glslang validator path                                                                                                                            | Tries to execute `glslang` first, then `./glslang` |
+| `--glslang`         | Glslang validator path                                                                                                                            | Tries to execute `./glslang` first, then `glslang` |
 
 Compiles all materials from input project paths into output directory (or into project folders, if `--output` is not specified).
 See [projects documentation](project.md) for more details.
