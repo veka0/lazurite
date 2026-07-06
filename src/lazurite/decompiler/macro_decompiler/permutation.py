@@ -22,11 +22,13 @@ class FunctionPermutation(PermutationBase):
 
 
 class ShaderPermutation(PermutationBase):
+    original_code: str
     functions: dict[FunctionName, FunctionPermutation]
 
     def __init__(self):
         super().__init__()
         self.functions = {}
+        self.original_code = ""
 
     def extract_functions(self):
         """

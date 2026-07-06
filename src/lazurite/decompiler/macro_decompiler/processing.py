@@ -195,7 +195,7 @@ def strip_comments(code: str):
     """
     Removes single line and multiline comments from GLSL code.
     """
-    code = re.sub(r"//.*\n", "", code)
     code = re.sub(r"/\*.*?\*/", "", code, flags=re.DOTALL)
-    code = re.sub(r"\n\n+", "\n", code)
+    code = re.sub(r"\n\n+([^\n])", r"\n\1", code)
+    code = re.sub(r"\s*//.*\n", "\n", code)
     return code

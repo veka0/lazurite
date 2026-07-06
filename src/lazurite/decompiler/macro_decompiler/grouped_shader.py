@@ -1,5 +1,5 @@
 from .processing import format_function_name
-from .type_aliases import ShaderLineIndex, ShaderFlags, FunctionName
+from .type_aliases import ShaderLineIndex, ShaderFlags, FunctionName, ShaderLine
 from .all_flags import AllFlags
 
 
@@ -8,7 +8,7 @@ class CodeLineGroup:
     A group of consecutive lines of code that share the same condition (appear when the same flags are set)
     """
 
-    lines: list[ShaderLineIndex]
+    lines: list[ShaderLine]
     condition: list[ShaderFlags]
     expression_search_index: int | None
 
@@ -17,8 +17,8 @@ class CodeLineGroup:
         self.condition = []
         self.expression_search_index = None
 
-    def assemble(self, line_decode_table: list[str], macro_expressions: list[str]):
-        code = "\n".join(line_decode_table[i] for i in self.lines)
+    def assemble(self, macro_expressions: list[str]):
+        code = "\n".join(self.lines)
         if self.expression_search_index is not None:
             code = f"{macro_expressions[self.expression_search_index]}\n{code}\n#endif"
         return code
@@ -65,14 +65,10 @@ class DiffedShaderWithGroupedLines:
         """
         Assembles shader back into its source code form
         """
-        shader_code = self.assemble_line_groups(
-            self.main_code, line_decode_table, macro_expressions
-        )
+        shader_code = self.assemble_line_groups(self.main_code, macro_expressions)
 
         for func_name, func_body in self.functions.items():
-            func_body = self.assemble_line_groups(
-                func_body, line_decode_table, macro_expressions
-            )
+            func_body = self.assemble_line_groups(func_body, macro_expressions)
             if not func_body.startswith("\n"):
                 func_body = "\n" + func_body
 
@@ -90,9 +86,6 @@ class DiffedShaderWithGroupedLines:
     @staticmethod
     def assemble_line_groups(
         code: list[CodeLineGroup],
-        line_decode_table: list[str],
         macro_expressions: list[str],
     ):
-        return "\n".join(
-            group.assemble(line_decode_table, macro_expressions) for group in code
-        )
+        return "\n".join(group.assemble(macro_expressions) for group in code)

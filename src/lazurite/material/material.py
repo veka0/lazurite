@@ -577,32 +577,45 @@ class Material:
                             .replace(f"defined({stage_name})", f"{stage_name}")
                         )
 
-                    if flag_definition or passes:
-                        comment = "/*\n* Available Macros:"
-                        if passes:
-                            comment += "\n*\n* Passes:"
-                            for pass_name in passes:
-                                pass_name = util.generate_pass_name_macro(pass_name)
-                                comment += f"\n* - {pass_name}"
-                                if pass_name not in macros:
-                                    comment += " (not used)"
+                    comment_data = {"Available Macros": []}
+                    if passes:
+                        comment_data["Passes"] = []
+                        for pass_name in passes:
+                            pass_name = util.generate_pass_name_macro(pass_name)
+                            if pass_name not in macros:
+                                pass_name += " (not used)"
 
-                        if flag_definition:
-                            for flag_name, values in flag_definition.items():
-                                comment += f"\n*\n* {flag_name}:"
-                                for flag_value in values:
-                                    flag = util.generate_flag_name_macro(
-                                        flag_name, flag_value, False
-                                    )
-                                    comment += f"\n* - {flag}"
-                                    if flag not in macros:
-                                        comment += " (not used)"
+                            comment_data["Passes"].append(pass_name)
 
-                        comment += "\n*/"
+                    if flag_definition:
+                        for flag_name, values in flag_definition.items():
+                            comment_data[flag_name] = []
+                            for flag_value in values:
+                                flag = util.generate_flag_name_macro(
+                                    flag_name, flag_value, False
+                                )
+                                if flag not in macros:
+                                    flag += " (not used)"
+                                comment_data[flag_name].append(flag)
 
-                        code = util.insert_header_comment(code, comment)
+                    comment_data["Available Resources"] = []
+                    if self.buffers:
+                        buffers = self.buffers.copy()
+                        buffers.sort(key=lambda b: b.name)
+                        comment_data["Buffers"] = [b.format_to_glsl() for b in buffers]
 
-                        restored_shaders.append((platform, stage, shader_pass, code))
+                    if self.uniforms:
+                        uniforms = self.uniforms.copy()
+                        uniforms.sort(key=lambda u: u.name)
+                        comment_data["Uniforms"] = [
+                            u.format_to_glsl() for u in uniforms
+                        ]
+
+                    comment = util.generate_shader_header_comment(comment_data)
+
+                    code = util.insert_header_comment(code, comment)
+
+                    restored_shaders.append((platform, stage, shader_pass, code))
 
         return restored_shaders
 

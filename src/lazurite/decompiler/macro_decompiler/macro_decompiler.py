@@ -11,6 +11,13 @@ from .expression_processing import (
     process_sympy_expressions,
     mark_approximated_results,
 )
+from .variables import (
+    process_stuff,
+    inline_buffers,
+    sort_resources,
+    resolve_variables,
+)
+from .functions import emit_functions
 
 
 @dataclass
@@ -40,16 +47,25 @@ def restore_code(
             code = strip_comments(code)
         if process_shaders:
             code = preprocess_shader(code)
+        code = inline_buffers(code)
+        code = sort_resources(code)
+        code = emit_functions(code)
 
         permutation = ShaderPermutation()
         permutation.flags = variant.flags.copy()
         permutation.code = code
+        permutation.original_code = code
         permutation.extract_functions()
 
         shader_permutations.append(permutation)
 
+    variable_definition = process_stuff(shader_permutations)
+
     encoded_shader = EncodedShader(shader_permutations)
     diffed_shader = encoded_shader.diff()
+
+    resolve_variables(diffed_shader, encoded_shader, variable_definition)
+
     diffed_grouped_shader = diffed_shader.group_lines()
 
     local_flag_definition = LocalFlagDeinition.from_diffed_grouped_shader(

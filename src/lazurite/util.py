@@ -118,3 +118,19 @@ def insert_version_directive(code: str, platform: ShaderPlatform):
             version_string += " es"
         code = f"#version {version_string}\n{code}"
     return code
+
+
+def generate_shader_header_comment(comment_data: dict[str, list[str]]):
+    lines = ["/*"]
+
+    for label, values in comment_data.items():
+        lines.append(f"* {label}:")
+        for value in values:
+            lines.append(f"* - {value}")
+        lines.append("*")
+
+    if lines[-1] == "*":
+        lines.pop()
+    lines.append("*/")
+
+    return "\n".join(lines)

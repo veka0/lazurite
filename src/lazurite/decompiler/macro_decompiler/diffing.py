@@ -2,17 +2,24 @@ import myers
 from copy import copy
 
 from .grouped_shader import CodeLineGroup, DiffedShaderWithGroupedLines
-from .type_aliases import FunctionName, ShaderFlags, ShaderLineIndex
+from .type_aliases import FunctionName, ShaderFlags, ShaderLineIndex, ShaderLine
 from .permutation import EncodedUniqufiedPermutations
+
+PermutationCodeLineIndex = int
+PermutationIndex = int
 
 
 class DiffedCode:
-    lines: list[ShaderLineIndex]
+    encoded_lines: list[ShaderLineIndex]
+    lines: list[ShaderLine]
     line_conditions: list[list[ShaderFlags]]
+    line_metadata: list[list[tuple[PermutationIndex, PermutationCodeLineIndex]]]
 
     def __init__(self):
+        self.encoded_lines = []
         self.lines = []
         self.line_conditions = []
+        self.line_metadata = []
 
     def group_lines(self):
         """
@@ -62,27 +69,42 @@ def diff_permutations(encoded_permutations: EncodedUniqufiedPermutations):
     lines: list[ShaderLineIndex] = []
     new_conditions: list[list[ShaderFlags]]
     line_conditions: list[list[ShaderFlags]] = []
-    for code, flag_list in zip(encoded_permutations.codes, encoded_permutations.flags):
+    line_metadata: list[list[tuple[PermutationIndex, PermutationCodeLineIndex]]] = []
+    new_metadata: list[list[tuple[PermutationIndex, PermutationCodeLineIndex]]] = []
+    for i, (code, flag_list) in enumerate(
+        zip(encoded_permutations.codes, encoded_permutations.flags)
+    ):
         diff = myers.diff(lines, code)
         lines = []
         new_conditions = []
-        current_index = 0
+        new_metadata = []
+        this_line_index = 0
+        other_line_index = 0
         for op, val in diff:
             lines.append(val)
             if op == "i":
                 new_conditions.append(copy(flag_list))
+                new_metadata.append([(i, other_line_index)])
+                other_line_index += 1
             elif op == "r":
-                new_conditions.append(line_conditions[current_index])
-                current_index += 1
+                new_conditions.append(line_conditions[this_line_index])
+                new_metadata.append(line_metadata[this_line_index])
+                this_line_index += 1
             elif op == "k":
-                condition = line_conditions[current_index]
+                condition = line_conditions[this_line_index]
                 condition.extend(flag_list)
                 new_conditions.append(condition)
-                current_index += 1
+                metadata = line_metadata[this_line_index]
+                metadata.append((i, other_line_index))
+                new_metadata.append(metadata)
+                this_line_index += 1
+                other_line_index += 1
         line_conditions = new_conditions
+        line_metadata = new_metadata
 
     diffed_shader = DiffedCode()
-    diffed_shader.lines = lines
+    diffed_shader.encoded_lines = lines
+    diffed_shader.line_metadata = line_metadata
     diffed_shader.line_conditions = line_conditions
 
     return diffed_shader

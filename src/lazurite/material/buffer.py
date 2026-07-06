@@ -56,6 +56,23 @@ class BufferType(Enum):
 
     # ? -> never observed in-game
 
+    def to_glsl_syntax(self, format=""):
+        g = format[0] if format in ("uint", "int") else ""
+
+        return {
+            BufferType.texture2D: f"{g}sampler2D",
+            BufferType.texture2DArray: f"{g}sampler2DArray",
+            BufferType.external2D: self.name,  # ?
+            BufferType.texture3D: f"{g}sampler3D",
+            BufferType.textureCube: f"{g}samplerCube",
+            BufferType.textureCubeArray: f"{g}samplerCubeArray",
+            BufferType.structBuffer: self.name,  # ?
+            BufferType.rawBuffer: self.name,  # ?
+            BufferType.accelerationStructure: "accelerationStructureEXT",
+            BufferType.shadow2D: f"sampler2DShadow",
+            BufferType.shadow2DArray: f"sampler2DArrayShadow",
+        }[self]
+
 
 class Buffer:
     class CustomTypeInfo:
@@ -268,3 +285,15 @@ class Buffer:
                 self.sampler_state = None
 
         return self
+
+    def format_to_glsl(self):
+        if self.type in (BufferType.structBuffer, BufferType.rawBuffer):
+            if (
+                self.access in (BufferAccess.readonly, BufferAccess.writeonly)
+                and self.type is BufferType.rawBuffer
+            ):
+                return f"layout(binding = {self.reg1}, std430) {self.access.name} buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
+            else:
+                return f"layout(binding = {self.reg1}, std430) buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
+
+        return f"uniform {self.precision.name} {self.type.to_glsl_syntax(self.texture_format)} s_{self.name};"

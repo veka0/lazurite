@@ -97,3 +97,6 @@ class Uniform:
         self.count = object.get("count", self.count)
         self.default = object.get("default", self.default)
         return self
+
+    def format_to_glsl(self):
+        return f"uniform {self.type.name} {self.name}{f'[{self.count}]' if self.count > 1 else ''};"
