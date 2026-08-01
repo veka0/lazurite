@@ -14,7 +14,7 @@ class ShaderPlatform(Enum):
     ESSL_310 = auto()
     Metal = auto()
     Vulkan = auto()
-    Nvn = auto()
+    Nvn = auto()  # Removed in 1.26.40.30
     PSSL = auto()
     Unknown = auto()
 
@@ -33,9 +33,8 @@ class ShaderPlatform(Enum):
                 cls.ESSL_310: 8,
                 cls.Metal: 9,
                 cls.Vulkan: 10,
-                cls.Nvn: 11,
-                cls.PSSL: 12,
-                cls.Unknown: 13,
+                cls.PSSL: 11,
+                cls.Unknown: 12,
                 # Platform conversion
                 cls.ESSL_300: cls.ESSL_310,
             }
