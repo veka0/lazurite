@@ -197,11 +197,9 @@ Below is a list of built-in (vanilla) uniform override IDs.
     "Direct3D_XBX": true,
     "GLSL_120": true,
     "GLSL_430": true,
-    "ESSL_300": true,
     "ESSL_310": true,
     "Metal": true,
     "Vulkan": true,
-    "Nvn": true,
     "PSSL": true,
     "Unknown": true
   },
