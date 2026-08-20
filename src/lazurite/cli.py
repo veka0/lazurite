@@ -243,7 +243,7 @@ def info(args):
             for variant in shader_pass.variants:
                 shader_count += len(variant.shaders)
 
-        material.buffers.sort(key=lambda x: x.reg1)
+        material.buffers.sort(key=lambda x: x.register_slot)
         material.sort_variants()
         material.passes.sort(key=lambda x: x.name)
         material.uniforms.sort(key=lambda x: x.name)
@@ -253,6 +253,25 @@ def info(args):
         stages = [p.name for p in material.get_stages()]
         stages.sort()
 
+        passes_object = {}
+        output_bindings_object = {}
+        for shader_pass in material.passes:
+            macro = util.generate_pass_name_macro(shader_pass.name)
+
+            reconstruction = util.reconstruct_fragment_outputs(
+                shader_pass.output_binding_signature
+            )
+
+            if reconstruction is None:
+                fragment_outputs = "Unknown"
+            else:
+                reconstruction.sort()
+                fragment_outputs = ", ".join(reconstruction)
+                fragment_outputs = f"[{fragment_outputs}]"
+            fragment_outputs = f"{fragment_outputs} (Signature = {shader_pass.output_binding_signature})"
+            passes_object[shader_pass.name] = macro
+            output_bindings_object[shader_pass.name] = fragment_outputs
+
         info = {
             "Name": material.name,
             "Format Version": material.version,
@@ -261,17 +280,17 @@ def info(args):
             "Total Shaders": shader_count,
             "Platforms": platforms,
             "Stages": stages,
-            "Passes": {
-                p.name: util.generate_pass_name_macro(p.name) for p in material.passes
-            },
+            "Passes": passes_object,
+            "Fragment Output Bindings": output_bindings_object,
             "Flags": {
                 key: {v: util.generate_flag_name_macro(key, v) for v in value}
                 for key, value in material.get_flag_definitions().items()
             },
             "Buffers": {
                 f"{b.precision.name} {b.type.name} {b.name}{' '+ b.texture_format if b.texture_format else ''}": {
-                    "Reg1": b.reg1,
-                    "Reg2": b.reg2,
+                    "Register Slot": b.register_slot,
+                    "Binding Slot": b.binding_slot,
+                    "Slot Count": b.slot_count,
                     "Unordered Access": b.unordered_access,
                     "Texture Path": b.texture_path,
                     "Sampler State": (

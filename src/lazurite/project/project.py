@@ -148,7 +148,9 @@ def _generate_defines(
         defines.append(MacroDefine("BGFX_CONFIG_MAX_BONES", 4))
 
     # TODO: remove `s_`, so that SSBOs in restored vanilla code can work right away.
-    defines.extend(MacroDefine(f"s_{s.name}_REG", s.reg1) for s in material.buffers)
+    defines.extend(
+        MacroDefine(f"s_{s.name}_REG", s.register_slot) for s in material.buffers
+    )
 
     if shader_pass.name in mat_config.macro_overwrite_pass:
         defines.extend(mat_config.macro_overwrite_pass[shader_pass.name])

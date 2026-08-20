@@ -1,4 +1,5 @@
 from io import BytesIO
+from functools import cache
 import struct
 import re
 
@@ -134,3 +135,149 @@ def generate_shader_header_comment(comment_data: dict[str, list[str]]):
     lines.append("*/")
 
     return "\n".join(lines)
+
+
+def hash_murmur2a(data: bytes, seed=0) -> int:
+    """
+    MurMur2A hash. Used by the game to calculate output binding signature.
+    """
+    M = 0x5BD1E995
+    R = 24
+    MASK_32 = 2**32 - 1
+
+    def mmix(h, k):
+        k = (k * M) & MASK_32
+        k ^= k >> R
+        k = (k * M) & MASK_32
+        h = (h * M) & MASK_32
+        h ^= k
+
+        return h, k
+
+    l = len(data)
+
+    h = seed
+
+    for i in range(0, (len(data) // 4) * 4, 4):
+        k = int.from_bytes(data[i : i + 4], "little")
+        h, k = mmix(h, k)
+
+    t = 0
+    for i in range(len(data) % 4, 0, -1):
+        t ^= data[i + (len(data) // 4) * 4 - 1] << ((i - 1) * 8)
+
+    h, t = mmix(h, t)
+    h, l = mmix(h, l)
+
+    h ^= h >> 13
+    h = (h * M) & MASK_32
+    h ^= h >> 15
+
+    return h
+
+
+def hash_fnv1_64(string: str):
+    """
+    64bit fnv1 hash.
+    """
+    OFFSET = 0xCBF29CE484222325
+    PRIME = 0x100000001B3
+    MASK_64 = 2**64 - 1
+
+    hash = OFFSET
+    for b in string.encode():
+        hash = (hash * PRIME) & MASK_64
+        hash ^= b
+
+    return hash
+
+
+def get_output_binding_signature(
+    named_fragment_outputs: list[str], sort_intermediate_hashes=True
+) -> int:
+    """
+    Returns output binding signature for a gven list of named framebuffer outputs.
+
+    `sort_intermediate_hashes` parameter makes it such that the exact order of outputs in the list doesn't matter.
+    It is set to true by default, as the game appears to apply this sorting, when calculating binding signatures.
+
+    Example usage:
+    ```
+    get_output_binding_signature([]) # -> 0
+    get_output_binding_signature(['Color0']) # -> 1268872610
+    get_output_binding_signature(['Color1']) # -> 1444265990
+    get_output_binding_signature(['Color0', 'Color1']) # -> 102126840
+    get_output_binding_signature(['Color0', 'Color1', 'Color2']) # -> 3853911848
+    ```
+    """
+    hashes = [hash_fnv1_64(x) for x in named_fragment_outputs]
+
+    if sort_intermediate_hashes:
+        hashes.sort()
+
+    data = b""
+    for hash in hashes:
+        data += hash.to_bytes(8)[::-1]
+
+    return hash_murmur2a(data)
+
+
+@cache
+def _reconstruct_fragment_outputs(
+    output_binding_signature: int,
+) -> list[str] | None:
+    if output_binding_signature == 0:
+        return []
+
+    INDICES_TO_CHECK = 8
+    MAX_FRAGMENT_OUTPUTS = 4  # How many outputs to check
+
+    for binding_count in range(1, MAX_FRAGMENT_OUTPUTS):
+        for i in range(INDICES_TO_CHECK**binding_count):
+            data = b""
+
+            packed_indices = i
+            for _ in range(binding_count):
+                index = packed_indices % INDICES_TO_CHECK
+                data += hash_fnv1_64(f"Color{index}").to_bytes(8)[::-1]
+                packed_indices //= INDICES_TO_CHECK
+
+            if hash_murmur2a(data) == output_binding_signature:
+                named_outputs = []
+
+                packed_indices = i
+                for _ in range(binding_count):
+                    index = packed_indices % INDICES_TO_CHECK
+                    named_outputs.append(f"Color{index}")
+                    packed_indices //= INDICES_TO_CHECK
+
+                return named_outputs
+
+    return None
+
+
+def reconstruct_fragment_outputs(
+    output_binding_signature: int,
+) -> list[str] | None:
+    """
+    Attempts to reconstruct a list of named framebuffer outputs, based on the provided output binding signature. Returns `None` if it fails to find the right combination.
+
+    It works by checking all combinations of names, up to a certain limit, until one of them produces the right hash.
+    This function is cached, so once a solution for a given signature is found, it will be reused for subsequent function calls with the same inputs.
+
+    Example usage:
+    ```
+    reconstruct_fragment_outputs(0) # -> []
+    reconstruct_fragment_outputs(1268872610) # -> ['Color0']
+    reconstruct_fragment_outputs(1444265990) # -> ['Color1']
+    reconstruct_fragment_outputs(102126840) # -> ['Color0', 'Color1']
+    reconstruct_fragment_outputs(3853911848) # -> ['Color2', 'Color0', 'Color1']
+    reconstruct_fragment_outputs(12345) # -> None
+    ```
+    """
+    output = _reconstruct_fragment_outputs(output_binding_signature)
+
+    if isinstance(output, list):
+        output = output.copy()
+
+    return output

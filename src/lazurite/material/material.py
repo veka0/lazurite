@@ -24,10 +24,10 @@ class Material:
     MAGIC = 168942106
     EXTENSION = ".material.bin"
     JSON_EXTENSION = ".material.json"
-    JSON_FORMAT_VERSION = 1
+    JSON_FORMAT_VERSION = 2
     COMPILED_MATERIAL_DEFINITION = "RenderDragon.CompiledMaterialDefinition"
     INITIAL_VERSION = 22
-    LATEST_VERSION = 25
+    LATEST_VERSION = 26
 
     version: int
     name: str
@@ -494,7 +494,8 @@ class Material:
 
         for p in self.passes:
             passes.append(p.name)
-            for key, value in p.default_variant.items():
+            for key, values in p.flag_domain.items():
+                value = values[0]  # TODO: Refactor this
                 if key in flag_definition:
                     flag_definition[key].add(value)
                 else:

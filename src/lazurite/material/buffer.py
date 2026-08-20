@@ -84,14 +84,14 @@ class Buffer:
             self.size = size
 
     name: str
-    reg1: int
+    register_slot: int
     access: BufferAccess
     precision: Precision
     unordered_access: bool
     type: BufferType
     texture_format: str
-    always_one: int
-    reg2: int
+    slot_count: int
+    binding_slot: int
     sampler_state: SamplerState | None
     default_texture: str
     texture_path: str
@@ -99,14 +99,14 @@ class Buffer:
 
     def __init__(self):
         self.name = ""
-        self.reg1 = 0
+        self.register_slot = 0
         self.access = BufferAccess.readonly
         self.precision = Precision.lowp
         self.unordered_access = False
         self.type = BufferType.texture2D
         self.texture_format = ""
-        self.always_one = 1
-        self.reg2 = 0
+        self.slot_count = 1
+        self.binding_slot = 0
         self.sampler_state = None
         self.default_texture = ""
         self.texture_path = ""
@@ -114,15 +114,15 @@ class Buffer:
 
     def read(self, file: BytesIO, version: int):
         self.name = util.read_string(file)
-        self.reg1 = util.read_ushort(file)
+        self.register_slot = util.read_ushort(file)
         self.access = BufferAccess(util.read_ubyte(file))  # 1 2 3
         self.precision = Precision(util.read_ubyte(file))  # 0 2
         self.unordered_access = util.read_bool(file)
         self.type = BufferType(util.read_ubyte(file))  # 0 - 9
         # Values according to bgfx_compute.sh: (empty string) r32ui rg32ui rgba32ui r32f r16f rg16f rgba16f rgba8 rg8 r8 rgba32f float int uint
         self.texture_format = util.read_string(file)
-        self.always_one = util.read_ulong(file)  # 1
-        self.reg2 = util.read_ubyte(file)  # same as reg1
+        self.slot_count = util.read_ulong(file)
+        self.binding_slot = util.read_ubyte(file)
 
         if util.read_bool(file):
             self.sampler_state = SamplerState(util.read_ubyte(file))
@@ -144,14 +144,14 @@ class Buffer:
 
     def write(self, file: BytesIO, version: int):
         util.write_string(file, self.name)
-        util.write_ushort(file, self.reg1)
+        util.write_ushort(file, self.register_slot)
         util.write_ubyte(file, self.access.value)
         util.write_ubyte(file, self.precision.value)
         util.write_bool(file, self.unordered_access)
         util.write_ubyte(file, self.type.value)
         util.write_string(file, self.texture_format)
-        util.write_ulong(file, self.always_one)
-        util.write_ubyte(file, self.reg2)
+        util.write_ulong(file, self.slot_count)
+        util.write_ubyte(file, self.binding_slot)
 
         util.write_bool(file, self.sampler_state is not None)
         if self.sampler_state is not None:
@@ -175,15 +175,15 @@ class Buffer:
     def serialize_properties(self):
         obj = {
             "name": self.name,
-            "reg1": self.reg1,
-            "reg2": self.reg2,
+            "register_slot": self.register_slot,
+            "binding_slot": self.binding_slot,
             "type": self.type.name,
             "precision": self.precision.name,
             "access": self.access.name,
             "texture_format": self.texture_format,
             "default_texture": self.default_texture,
             "unordered_access": self.unordered_access,
-            "always_one": self.always_one,
+            "slot_count": self.slot_count,
             "texture_path": self.texture_path,
             "sampler_state": {},
             "custom_type_info": {},
@@ -207,15 +207,15 @@ class Buffer:
     def serialize_minimal(self):
         obj = [
             self.name,
-            self.reg1,
-            self.reg2,
+            self.register_slot,
+            self.binding_slot,
             self.type.value,
             self.precision.value,
             self.access.value,
             self.texture_format,
             self.default_texture,
             int(self.unordered_access),
-            self.always_one,
+            self.slot_count,
             self.texture_path,
             self.sampler_state.get_value() if self.sampler_state else -1,
         ]
@@ -227,15 +227,15 @@ class Buffer:
 
     def load_minimal(self, object: list):
         self.name = object[0]
-        self.reg1 = object[1]
-        self.reg2 = object[2]
+        self.register_slot = object[1]
+        self.binding_slot = object[2]
         self.type = BufferType(object[3])
         self.precision = Precision(object[4])
         self.access = BufferAccess(object[5])
         self.texture_format = object[6]
         self.default_texture = object[7]
         self.unordered_access = bool(object[8])
-        self.always_one = object[9]
+        self.slot_count = object[9]
         self.texture_path = object[10]
         self.sampler_state = SamplerState(object[11]) if object[11] != -1 else None
 
@@ -245,15 +245,15 @@ class Buffer:
 
     def load(self, object: dict, path: str):
         self.name = object.get("name", self.name)
-        self.reg1 = object.get("reg1", self.reg1)
+        self.register_slot = object.get("register_slot", self.register_slot)
         self.access = BufferAccess[object.get("access", self.access.name)]
         self.precision = Precision[object.get("precision", self.precision.name)]
         self.unordered_access = object.get("unordered_access", self.unordered_access)
         self.type = BufferType[object.get("type", self.type.name)]
         self.texture_format = object.get("texture_format", self.texture_format)
-        self.always_one = object.get("always_one", self.always_one)
+        self.slot_count = object.get("slot_count", self.slot_count)
         self.texture_path = object.get("texture_path", self.texture_path)
-        self.reg2 = object.get("reg2", self.reg2)
+        self.binding_slot = object.get("binding_slot", self.binding_slot)
         self.default_texture = object.get("default_texture", self.default_texture)
 
         if "custom_type_info" in object:
@@ -292,8 +292,8 @@ class Buffer:
                 self.access in (BufferAccess.readonly, BufferAccess.writeonly)
                 and self.type is BufferType.rawBuffer
             ):
-                return f"layout(binding = {self.reg1}, std430) {self.access.name} buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
+                return f"layout(binding = {self.register_slot}, std430) {self.access.name} buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
             else:
-                return f"layout(binding = {self.reg1}, std430) buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
+                return f"layout(binding = {self.register_slot}, std430) buffer s_{self.name}Buffer {{ {self.custom_type_info.struct} s_{self.name}[]; }};"
 
         return f"uniform {self.precision.name} {self.type.to_glsl_syntax(self.texture_format)} s_{self.name};"

@@ -15,8 +15,8 @@ class Pass:
     supported_platforms: SupportedPlatforms
     fallback_pass: str
     default_blend_mode: BlendMode
-    default_variant: dict[str, str]
-    framebuffer_binding: int
+    flag_domain: dict[str, list[str]]
+    output_binding_signature: int
     variants: list[Variant]
 
     def __init__(self):
@@ -24,8 +24,8 @@ class Pass:
         self.supported_platforms = SupportedPlatforms()
         self.fallback_pass = ""
         self.default_blend_mode = BlendMode.Unspecified
-        self.default_variant = {}
-        self.framebuffer_binding = 0
+        self.flag_domain = {}
+        self.output_binding_signature = 0
         self.variants = []
 
     def read(self, file: BytesIO, version: int):
@@ -40,16 +40,21 @@ class Pass:
         if util.read_bool(file):  # Has default blend mode
             self.default_blend_mode = BlendMode[util.read_ushort(file)]
 
-        self.default_variant = {}
-        default_flag_count = util.read_ushort(file)
-        for _ in range(default_flag_count):
-            key = util.read_string(file)
-            self.default_variant[key] = util.read_string(file)
+        self.flag_domain = {}
+        if version >= 26:
+            for _ in range(util.read_ushort(file)):
+                key = util.read_string(file)
+                values = [util.read_string(file) for _ in range(util.read_ushort(file))]
+                self.flag_domain[key] = values
+        else:
+            # Read default variant as flag domain with 1 value for each flag,
+            # since the first value of each flag in flag domain corresponds to the variant that the game uses as default
+            for _ in range(util.read_ushort(file)):
+                key = util.read_string(file)
+                self.flag_domain[key] = [util.read_string(file)]
 
         if version >= 23:
-            self.framebuffer_binding = util.read_ulong(
-                file
-            )  # 3853911848 for GBuffer, 0 otherwise
+            self.output_binding_signature = util.read_ulong(file)
 
         self.variants = [
             Variant().read(file, version) for _ in range(util.read_ushort(file))
@@ -66,13 +71,21 @@ class Pass:
         if self.default_blend_mode != BlendMode.Unspecified:
             util.write_ushort(file, self.default_blend_mode.value)
 
-        util.write_ushort(file, len(self.default_variant))
-        for key in self.default_variant:
-            util.write_string(file, key)
-            util.write_string(file, self.default_variant[key])
+        if version >= 26:
+            util.write_ushort(file, len(self.flag_domain))
+            for key, values in self.flag_domain.items():
+                util.write_string(file, key)
+                util.write_ushort(file, len(values))
+                for value in values:
+                    util.write_string(file, value)
+        else:
+            util.write_ushort(file, len(self.flag_domain))
+            for key in self.flag_domain:
+                util.write_string(file, key)
+                util.write_string(file, self.flag_domain[key][0])
 
         if version >= 23:
-            util.write_ulong(file, self.framebuffer_binding)
+            util.write_ulong(file, self.output_binding_signature)
 
         util.write_ushort(file, len(self.variants))
         for variant in self.variants:
@@ -89,9 +102,9 @@ class Pass:
             if self.default_blend_mode != BlendMode.Unspecified
             else ""
         )
-        obj["default_variant"] = self.default_variant
+        obj["flag_domain"] = self.flag_domain
 
-        obj["framebuffer_binding"] = self.framebuffer_binding
+        obj["output_binding_signature"] = self.output_binding_signature
 
         obj["variants"] = []
         for i, variant in enumerate(self.variants):
@@ -114,11 +127,8 @@ class Pass:
                 if self.default_blend_mode != BlendMode.Unspecified
                 else ""
             ),
-            {
-                list(flag_definitions.keys()).index(x): flag_definitions[x].index(y)
-                for x, y in self.default_variant.items()
-            },
-            self.framebuffer_binding,
+            self.flag_domain,
+            self.output_binding_signature,
         ]
 
         variants = []
@@ -145,13 +155,9 @@ class Pass:
         mode = object[3]
         self.default_blend_mode = BlendMode(mode) if mode else BlendMode.Unspecified
 
-        flag_keys = list(flag_definitions.keys())
-        self.default_variant = {
-            flag_keys[int(x)]: flag_definitions[flag_keys[int(x)]][y]
-            for x, y in object[4].items()
-        }
+        self.flag_domain = object[4]
 
-        self.framebuffer_binding = object[5]
+        self.output_binding_signature = object[5]
         self.variants = [
             Variant().load_minimal(variant, flag_definitions, input_definitions)
             for variant in object[6]
@@ -185,15 +191,15 @@ class Pass:
         mode = object.get("default_blend_mode", None)
         if mode != None:
             self.default_blend_mode = BlendMode[mode] if mode else BlendMode.Unspecified
-        self.default_variant = object.get("default_variant", self.default_variant)
+        self.flag_domain = object.get("flag_domain", self.flag_domain)
 
         if "variants" in object:
             self.variants = [
                 Variant().load(variant, os.path.join(path, self.name))
                 for variant in object["variants"]
             ]
-        self.framebuffer_binding = object.get(
-            "framebuffer_binding", self.framebuffer_binding
+        self.output_binding_signature = object.get(
+            "output_binding_signature", self.output_binding_signature
         )
         return self
 
@@ -204,7 +210,7 @@ class Pass:
         return self
 
     def sort_variants(self):
-        self.default_variant = dict(sorted(self.default_variant.items()))
+        self.flag_domain = dict(sorted(self.flag_domain.items()))
 
         for variant in self.variants:
             variant.flags = dict(sorted(variant.flags.items()))
@@ -239,7 +245,7 @@ class Pass:
         """
         Returns a dict of all possible flag keys and their values.
         """
-        definitions = {key: {value} for key, value in self.default_variant.items()}
+        definitions = {key: {values[0]} for key, values in self.flag_domain.items()}
 
         for variant in self.variants:
             for key, value in variant.flags.items():
