@@ -208,7 +208,7 @@ Below is a list of built-in (vanilla) uniform override IDs.
   "flag_domain": {
     "AlphaTest": ["Off", "On"]
   },
-  "output_binding_signature": 0,
+  "output_binding_signature": 1268872610,
   "variants": [
     {
       "is_supported": true,
