@@ -10,8 +10,9 @@ This page documents `.material.bin` file format versions supported by Lazurite -
 
 ## Format Versions
 
-| Material Version | Initial Release | Initial Preview |
+| Material Version | Initial Preview | Initial Release |
 | ---------------- | --------------- | --------------- |
-| `22`             | `1.21.111.1`    | `1.21.110.20`   |
-| `23`             | `1.26.0.2`      | `1.26.0.23`     |
-| `25`             | `1.26.10.4`     | `1.26.10.20`    |
+| `22`             | `1.21.110.20`   | `1.21.111.1`    |
+| `23`             | `1.26.0.23`     | `1.26.0.2`      |
+| `25`             | `1.26.10.20`    | `1.26.10.4`     |
+| `26`             | `1.26.50.25`    | -               |

@@ -365,7 +365,7 @@ Example output:
 ```
 #### ActorBannerForwardPBR.material.bin ####
 Name: ActorBannerForwardPBR
-Format Version: 22
+Format Version: 26
 Encryption: NONE
 Parent: ActorForwardPBR
 Total Shaders: 544
@@ -383,6 +383,12 @@ Passes:
   - ForwardPBRAlphaTest: FORWARD_PBR_ALPHA_TEST_PASS
   - ForwardPBROpaque: FORWARD_PBR_OPAQUE_PASS
   - ForwardPBRTransparent: FORWARD_PBR_TRANSPARENT_PASS
+Fragment Output Bindings:
+  - DepthOnlyAlphaTest: [] (Signature = 0)
+  - DepthOnlyOpaque: [] (Signature = 0)
+  - ForwardPBRAlphaTest: [Color0, Color1] (Signature = 102126840)
+  - ForwardPBROpaque: [Color0, Color1] (Signature = 102126840)
+  - ForwardPBRTransparent: [Color0] (Signature = 1268872610)
 Flags:
   - Change_Color:
     - Multi: CHANGE_COLOR__MULTI
@@ -402,8 +408,9 @@ Flags:
     - Enabled: TINTING__ENABLED
 Buffers:
   - lowp texture2D BrdfLUT:
-    - Reg1: 0
-    - Reg2: 0
+    - Register Slot: 0
+    - Binding Slot: 0
+    - Slot Count: 1
     - Unordered Access: False
     - Texture Path:
     - Sampler State:
@@ -411,8 +418,9 @@ Buffers:
       - Texture Wrap: Clamp
     - Custom Type Info:
   - lowp structBuffer DirectionalLightSources:
-    - Reg1: 1
-    - Reg2: 1
+    - Register Slot: 1
+    - Binding Slot: 1
+    - Slot Count: 1
     - Unordered Access: True
     - Texture Path:
     - Sampler State:
@@ -420,15 +428,17 @@ Buffers:
       - Struct: LightSourceWorldInfo
       - Size: 448
   - lowp texture2D HDRI:
-    - Reg1: 2
-    - Reg2: 2
+    - Register Slot: 2
+    - Binding Slot: 2
+    - Slot Count: 1
     - Unordered Access: False
     - Texture Path: textures/hdri
     - Sampler State:
     - Custom Type Info:
   - lowp texture2D MaxFrameLuminance r32f:
-    - Reg1: 3
-    - Reg2: 3
+    - Register Slot: 3
+    - Binding Slot: 3
+    - Slot Count: 1
     - Unordered Access: True
     - Texture Path:
     - Sampler State:
