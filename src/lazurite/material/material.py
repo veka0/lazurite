@@ -24,7 +24,7 @@ class Material:
     MAGIC = 168942106
     EXTENSION = ".material.bin"
     JSON_EXTENSION = ".material.json"
-    JSON_FORMAT_VERSION = 2
+    JSON_FORMAT_VERSION = 3
     COMPILED_MATERIAL_DEFINITION = "RenderDragon.CompiledMaterialDefinition"
     INITIAL_VERSION = 22
     LATEST_VERSION = 26

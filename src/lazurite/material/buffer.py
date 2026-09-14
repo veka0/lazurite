@@ -92,6 +92,7 @@ class Buffer:
     texture_format: str
     slot_count: int
     binding_slot: int
+    unknown: int
     sampler_state: SamplerState | None
     default_texture: str
     texture_path: str
@@ -107,6 +108,7 @@ class Buffer:
         self.texture_format = ""
         self.slot_count = 1
         self.binding_slot = 0
+        self.unknown = 0
         self.sampler_state = None
         self.default_texture = ""
         self.texture_path = ""
@@ -123,6 +125,9 @@ class Buffer:
         self.texture_format = util.read_string(file)
         self.slot_count = util.read_ulong(file)
         self.binding_slot = util.read_ubyte(file)
+
+        if version >= 26:
+            self.unknown = util.read_ulong(file)
 
         if util.read_bool(file):
             self.sampler_state = SamplerState(util.read_ubyte(file))
@@ -152,6 +157,9 @@ class Buffer:
         util.write_string(file, self.texture_format)
         util.write_ulong(file, self.slot_count)
         util.write_ubyte(file, self.binding_slot)
+
+        if version >= 26:
+            util.write_ulong(file, self.unknown)
 
         util.write_bool(file, self.sampler_state is not None)
         if self.sampler_state is not None:
@@ -185,6 +193,7 @@ class Buffer:
             "unordered_access": self.unordered_access,
             "slot_count": self.slot_count,
             "texture_path": self.texture_path,
+            "unknown": self.unknown,
             "sampler_state": {},
             "custom_type_info": {},
         }
@@ -217,6 +226,7 @@ class Buffer:
             int(self.unordered_access),
             self.slot_count,
             self.texture_path,
+            self.unknown,
             self.sampler_state.get_value() if self.sampler_state else -1,
         ]
         if self.custom_type_info != None:
@@ -237,10 +247,11 @@ class Buffer:
         self.unordered_access = bool(object[8])
         self.slot_count = object[9]
         self.texture_path = object[10]
-        self.sampler_state = SamplerState(object[11]) if object[11] != -1 else None
+        self.unknown = object[11]
+        self.sampler_state = SamplerState(object[12]) if object[12] != -1 else None
 
-        if len(object) > 12:
-            self.custom_type_info = Buffer.CustomTypeInfo(object[12], object[13])
+        if len(object) > 13:
+            self.custom_type_info = Buffer.CustomTypeInfo(object[13], object[14])
         return self
 
     def load(self, object: dict, path: str):
@@ -254,6 +265,7 @@ class Buffer:
         self.slot_count = object.get("slot_count", self.slot_count)
         self.texture_path = object.get("texture_path", self.texture_path)
         self.binding_slot = object.get("binding_slot", self.binding_slot)
+        self.unknown = object.get("unknown", self.unknown)
         self.default_texture = object.get("default_texture", self.default_texture)
 
         if "custom_type_info" in object:
