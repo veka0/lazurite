@@ -12,6 +12,7 @@
 | `GLSL_430`      | ?           |                                                                         |
 | `ESSL_300`      | Android     | Removed in `.material.bin` [format version](supported_versions.md) `25` |
 | `ESSL_310`      | Android     |                                                                         |
+| `ESSL_320`      | Android     | Added in 1.26.60.28                                                     |
 | `Metal`         | iOS         |                                                                         |
 | `Vulkan`        | Switch      |                                                                         |
 | `Nvn`           | Switch      | Removed in 1.26.40.30                                                   |
