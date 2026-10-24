@@ -12,6 +12,7 @@ class ShaderPlatform(Enum):
     GLSL_430 = auto()
     ESSL_300 = auto()  # Removed in format version 25
     ESSL_310 = auto()
+    ESSL_320 = auto()  # Added in 1.26.60.28
     Metal = auto()
     Vulkan = auto()
     Nvn = auto()  # Removed in 1.26.40.30
@@ -20,7 +21,26 @@ class ShaderPlatform(Enum):
 
     @classmethod
     def _platform_mapping(cls, version: int):
-        if version >= 25:
+        if version >= 26:
+            return {
+                cls.Direct3D_SM40: 0,
+                cls.Direct3D_SM50: 1,
+                cls.Direct3D_SM60: 2,
+                cls.Direct3D_SM65: 3,
+                cls.Direct3D_XB1: 4,
+                cls.Direct3D_XBX: 5,
+                cls.GLSL_120: 6,
+                cls.GLSL_430: 7,
+                cls.ESSL_310: 8,
+                cls.ESSL_320: 9,
+                cls.Metal: 10,
+                cls.Vulkan: 11,
+                cls.PSSL: 12,
+                cls.Unknown: 13,
+                # Platform conversion
+                cls.ESSL_300: cls.ESSL_310,
+            }
+        elif version >= 25:
             return {
                 cls.Direct3D_SM40: 0,
                 cls.Direct3D_SM50: 1,

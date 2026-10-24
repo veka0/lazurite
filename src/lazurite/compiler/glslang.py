@@ -60,7 +60,11 @@ class Glslang:
             args.append("frag")
 
         version_string = platform.name[-3:]
-        if platform in (ShaderPlatform.ESSL_300, ShaderPlatform.ESSL_310):
+        if platform in (
+            ShaderPlatform.ESSL_300,
+            ShaderPlatform.ESSL_310,
+            ShaderPlatform.ESSL_320,
+        ):
             version_string += "es"
         args.extend(("--glsl-version", version_string))
 
